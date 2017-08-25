@@ -1,0 +1,90 @@
+{extend name='public:base' /}
+{block name="title"}修改管理员密码{/block}
+
+{block name="content"}
+<style>
+    .control-label{
+        padding-right:10px;
+    }
+</style>
+	<!--弹出添加用户窗口--><form class="form-horizontal" action="{:url('update_pass2')}" method="post" >
+	<input type="hidden" name="id" value="{$id}">
+		<div class="row" >
+			<div class="col-xs-8">
+				<div class="text-center">
+					<!---->
+					<h4 class="modal-title" id="gridSystemModalLabel">修改管理员密码</h4>
+				</div>
+				<div class="">
+					<div class="container-fluid">
+
+							<div class="form-group ">
+								<label for="sName" class="col-xs-3 control-label">原始密码：</label>
+								<div class="col-xs-8 ">
+                                        <input type="password" required class="form-control input-sm duiqi" name='pass' value="" id="" placeholder="">
+								</div>
+							</div>
+						<div class="form-group ">
+							<label for="sName" class="col-xs-3 control-label">新密码：</label>
+							<div class="col-xs-8 ">
+								<input type="password" required class="form-control input-sm duiqi" name='pass_new' value="" id="" placeholder="">
+							</div>
+						</div>
+						<div class="form-group ">
+							<label for="sName" class="col-xs-3 control-label">重复新密码：</label>
+							<div class="col-xs-8 ">
+								<input type="password" required class="form-control input-sm duiqi" name='repass_new' value="" id="" placeholder="">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="text-center">
+					<button type="submit" class="btn btn-xs btn-green">保 存</button>
+				</div>
+			</div>
+		</div>
+</form>
+
+<script>
+    $(function () {
+     /*   $('form').bootstrapValidator({
+            fields: {
+                pass: {
+                    validators:
+                        {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+
+                        }
+
+                },
+                pass_new: {
+                    validators:
+                        {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+
+                        }
+
+                },
+                repass_new: {
+                    validators:
+                        {
+                            notEmpty: {
+                                message: '不能为空'
+                            }
+
+                        }
+
+                }
+
+            }
+        });*/
+
+    });
+
+</script>
+
+{/block}

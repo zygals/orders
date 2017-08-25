@@ -1,0 +1,162 @@
+{extend name='public:base' /}
+{block name="title"}修改 {/block}
+{block name="content"}
+<style>
+    .control-label{
+        padding-right:10px;
+    }
+</style>
+<!--弹出添加用户窗口-->
+<form class="form-horizontal" action="<?php $str='/shop/'.$row_->id;echo url($str)?>" method="post" enctype="multipart/form-data" >
+    <input type="hidden" name="_method" value="put">
+    <div class="row" >
+        <div class="col-xs-8">
+            <div class="text-center">
+                <!---->
+                <h4 class="modal-title" id="gridSystemModalLabel">修改</h4>
+            </div>
+            <div class="">
+                <div class="container-fluid">
+
+                    <div class="form-group ">
+                        <label for="sName" class="col-xs-3 control-label">名称：</label>
+                        <div class="col-xs-8 ">
+                            <input type="text" class="form-control input-sm duiqi" name='name' value="{$row_->name}" id="" placeholder="">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="sKnot" class="col-xs-3 control-label">店铺类别：</label>
+                        <div class="col-xs-8">
+                            <select class=" form-control select-duiqi" name="cate_shop_id" id="a_cate_id">
+                                <option value="">--请选择--</option>
+                                <?php foreach ($list_cate_shop as $k=>$category){?>
+                                <option <?php echo $category->id==$row_->cate_shop_id?'selected':''?> value="{$category->id}">{$category->name}</option>
+                                <?php }?>
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="sName" class="col-xs-3 control-label ">开业：</label>
+                        <div class="col-xs-8 ">
+                            <input type="time" class="form-control input-sm duiqi time_sel" name='start_time' value="{$row_->start_time}" id="" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="sName" class="col-xs-3 control-label ">关业：</label>
+                        <div class="col-xs-8 ">
+                            <input type="time" class="form-control input-sm duiqi time_sel" name='end_time' value="{$row_->end_time}" id="" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sOrd" class="col-xs-3 control-label">代表图：</label>
+                        <div class="col-xs-4 " id="img_wrap">
+                            <img src="__IMGURL__{$row_->img_thumb}" alt="没有上传图片" />
+                            <input type="file" class="form-control  duiqi" id="" name="img" placeholder=""><span style="color:red">不选择表示不修改</span>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="form-group">
+                        <label for="situation" class="col-xs-3 control-label">支持：</label>
+                        <div class="col-xs-8">
+                            <label class="control-label" >
+                                <input type="checkbox" name="in_or_out[]"  value="1" <?php echo in_array(1,$row_->in_or_out)?'checked':""?>> 堂食</label> &nbsp;
+                            <label class="control-label">
+                                <input type="checkbox" name="in_or_out[]" value="2" <?php echo in_array(2,$row_->in_or_out)?'checked':""?> >外送</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="situation" class="col-xs-3 control-label">提供：</label>
+                        <div class="col-xs-8">
+                            <label class="control-label" >
+                                <input type="checkbox" name="functions[]"  value="1" <?php echo in_array(1,$row_->functions)?'checked':""?>>wifi</label> &nbsp;
+                            <label class="control-label">
+                                <input type="checkbox" name="functions[]" value="2" <?php echo in_array(2,$row_->functions)?'checked':""?> >刷卡</label>
+                            <label class="control-label" >
+                                <input type="checkbox" name="functions[]"  value="3" <?php echo in_array(3,$row_->functions)?'checked':""?>> 停车位</label>
+                            <label class="control-label" >
+                                <input type="checkbox" name="functions[]"  value="4" <?php echo in_array(4,$row_->functions)?'checked':""?>> 包箱</label>
+                        </div>
+                    </div>
+                    <div class="form-group" id="" >
+                        <label for="situation" class="col-xs-3 control-label">起送费：</label>
+                        <div class="col-xs-8">
+                            <label class="control-label" >
+                                <input type="text" name="fee_start_post" class="form-control input-sm duiqi" id="" value="{$row_->fee_start_post}" ></label> &nbsp;
+
+                        </div>
+                    </div>
+                    <div class="form-group" id="" >
+                        <label for="situation" class="col-xs-3 control-label">配送费：</label>
+                        <div class="col-xs-8">
+                            <label class="control-label" >
+                                <input type="text" name="fee_post" class="form-control input-sm duiqi" id="" value="{$row_->fee_post}" ></label> &nbsp;
+
+                        </div>
+                    </div>
+                    <div class="form-group" id="" >
+                        <label for="situation" class="col-xs-3 control-label">人均价格：</label>
+                        <div class="col-xs-8">
+                            <label class="control-label" >
+                                <input type="text" name="avg_price" class="form-control input-sm duiqi" id="" value="{$row_->avg_price}" ></label> &nbsp;
+
+                        </div>
+                    </div>
+                    <div class="form-group ">
+                        <label for="sName" class="col-xs-3 control-label">店铺标语　：</label>
+                        <div class="col-xs-8 ">
+                            <textarea name="slogan" class="form-control" style="height:50px">  {$row_->slogan}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group ">
+                        <label for="sName" class="col-xs-3 control-label">本店介绍　：</label>
+                        <div class="col-xs-8 ">
+                            <textarea name="info" class="form-control" style="height:120px">  {$row_->info}</textarea>
+                        </div>
+                    </div>
+                    <div class="form-group" id="" >
+                        <label for="situation" class="col-xs-3 control-label">电话：</label>
+                        <div class="col-xs-8">
+                            <label class="control-label" >
+                                <input type="" name="phone" class="form-control input-sm duiqi" id="" value=" {$row_->phone}" ></label> &nbsp;
+
+                        </div>
+                    </div>
+                    <div class="form-group" id="" >
+                        <label for="situation" class="col-xs-3 control-label">微信：</label>
+                        <div class="col-xs-8">
+                            <label class="control-label" >
+                                <input type="text" name="wx" class="form-control input-sm duiqi" id="" value=" {$row_->wx}" ></label> &nbsp;
+
+                        </div>
+                    </div>
+                    <div class="form-group" id="" >
+                        <label for="situation" class="col-xs-3 control-label">QQ：</label>
+                        <div class="col-xs-8">
+                            <label class="control-label" >
+                                <input type="text" name="qq" class="form-control input-sm duiqi" id="" value=" {$row_->qq}" ></label> &nbsp;
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="text-center">
+                <button type="reset" class="btn btn-xs btn-white" data-dismiss="modal">取 消</button>
+                <button type="submit" class="btn btn-xs btn-green">保 存</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+
+</script>
+
+{/block}

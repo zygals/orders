@@ -1,0 +1,113 @@
+{extend name='public:base' /}
+{block name="title"}列表{/block}
+
+{block name="content"}
+<style>
+	.pagination li.disabled>a, .pagination li.disabled>span{color:inherit;}
+	.pagination li>a, .pagination li>span{color:inherit}
+</style>
+<div role="tabpanel" class="tab-pane" id="user" style="display:block;">
+	<div class="check-div form-inline row">
+				<div class="col-xs-2">
+                    <a href="{:url('create')}"><button class="btn btn-yellow btn-xs" data-toggle="modal" data-target="#addUser" id="create">添加</button></a>
+		</div>
+		<div class="col-xs-10">
+			<form method="get" action="{:url('index')}">
+			<select name="cate_id" style="color:inherit">
+				<option value="">--请选择分类--</option>
+                <?php foreach($categories as $category){?>
+				<option value="{$category->id}"  {eq name="Think.get.cate_id" value="$category->id"}selected{/eq}>{$category->name}</option>
+                <?php }?>
+			</select>
+			<input type="text" name="name" value="{$Think.get.name}" class="form-control input-sm" placeholder="输入名称搜索">
+			<button class="btn btn-white btn-xs " type="submit">查 询 </button>
+			</form>
+		</div>
+
+	</div>
+	<div class="data-div">
+		<div class="row tableHeader">
+            <div class="col-xs-1 ">
+                编 号
+            </div>
+			<div class="col-xs-1 ">
+                名称
+			</div>
+			<div class="col-xs-1 ">
+			图片
+		</div>
+            <div class="col-xs-1 ">
+				现价
+            </div>
+			<div class="col-xs-1 ">
+				原价
+			</div>
+            <div class="col-xs-2 ">
+                分类
+            </div>
+			<div class="col-xs-2">
+				添加时间
+			</div>
+            <div class="col-xs-1">
+				状 态
+			</div>
+			<div class="col-xs-2">
+				操 作
+			</div>
+		</div>
+		<div class="tablebody">
+			<?php if(count($list)>0){?>
+			<?php foreach($list as $key=>$row_){?>
+			<div class="row cont_nowrap">
+                <div class="col-xs-1 ">
+                    {$row_->id}
+                </div>
+				<div class="col-xs-1 " title="{$row_->name}">
+					{$row_->name}
+				</div>
+				<div class="col-xs-1 " >
+					<a target="_blank" href="__IMGURL__{$row_->img}"><img src="__IMGURL__{$row_->img_thumb}" alt="暂无图片" width="50"/></a>
+				</div>
+				<div class="col-xs-1 ">
+					{$row_->price_now}
+				</div>
+				<div class="col-xs-1 ">
+					{$row_->price_original}
+				</div>
+                <div class="col-xs-2 " title="{$row_->cate_name}">
+                    {$row_->cate_name}
+                </div>
+                <div class="col-xs-2">
+                    {$row_->create_time}
+                </div>
+                <div class="col-xs-1">
+                    {$row_->status}
+                </div>
+				<div class="col-xs-2">
+                    <a href="{:url('edit')}?id={$row_->id}&page={$Think.get.page}"><button class="btn btn-success btn-xs edit_" data-toggle="modal" data-target="#reviseUser" data-id="{$row_->id}" onclick="">修改/查看</button></a>
+					<a onclick="return confirm('确定删除吗？删除后不可恢复')" href="{:url('delete')}?id={$row_->id}">  <button class="btn btn-danger btn-xs del_cate" > 删除</button></a>
+				</div>
+
+			</div>
+			<?php }?>
+			<?php }else{?>
+				<div class="row">
+					<div class="col-xs-12 ">
+						<h3 class="" align="center" style="color:red;font-size:18px">结果不存在</h3>
+					</div>
+				</div>
+			<?php }?>
+
+		</div>
+	</div>
+	<!--页码块-->
+	<footer class="footer">
+		{$list->render()}
+	</footer>
+
+</div>
+<script>
+ 
+</script>
+
+{/block}

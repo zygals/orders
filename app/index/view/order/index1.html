@@ -1,0 +1,185 @@
+{extend name='public:base' /}
+{block name="title"}列表{/block}
+
+{block name="content"}
+<script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+<script>
+    var app = angular.module("appname", []);
+    app.controller("controler", function($scope,$http) {
+        $http({
+            method: 'GET',
+            url: "{:url('index')}"
+        }).then(function successCallback(response) {
+            $scope.list_ = response.data;
+        }, function errorCallback(response) {
+            // 请求失败执行代码
+        });
+        $http({
+            method: 'GET',
+            url: "{:url('get_status')}"
+        }).then(function successCallback(response) {
+            $scope.arr_status = response.data;
+        }, function errorCallback(response) {
+            // 请求失败执行代码
+        });
+        $scope.search_=function () {
+            var status = $scope.status;
+            var time_from = $scope.time_from;
+            var time_to = $scope.time_to;
+
+            $http({
+                method: 'GET',
+                url: "{:url('index')}",
+                params:{status:status,time_from:time_from,time_to:time_to}
+            }).then(function successCallback(response) {
+                $scope.list_ = response.data;
+            }, function errorCallback(response) {
+                // 请求失败执行代码
+            });
+        }
+        $scope.lookAddr = function(item){
+			var address_id = item.address_id;
+            $http({
+                method: 'GET',
+                url: "{:url('getAddress')}",
+                params:{address_id:address_id}
+            }).then(function successCallback(response) {
+                $scope.address = response.data;
+            }, function errorCallback(response) {
+                // 请求失败执行代码
+            });
+		}
+
+    });
+</script>
+<style>
+	.pagination li.disabled>a, .pagination li.disabled>span{color:inherit;}
+	.pagination li>a, .pagination li>span{color:inherit}
+</style>
+<div ng-app="appname" ng-controller="controler" ng-init='name=231;' role="tabpanel" class="tab-pane" id="user" style="display:block;">
+	<div class="check-div form-inline">
+		<div class="col-xs-12">
+			<form method="" action="" >
+
+				<input type="date" id="" ng-model="time_from" value="" class="form-control input-sm" placeholder="从哪个日期？如：17-02-03">
+
+				<input type="date" id="" ng-model="time_to" value="" class="form-control input-sm" placeholder="到哪个日期?如：17-03-08">
+				<select  class="form-control" ng-model="status">
+					<option value="">－－选择状态－－</option>
+					<option value="{{index}}" ng-repeat="(index,x) in arr_status">{{x}}</option>
+
+				</select>
+				<button class="btn btn-white btn-xs " type="button" ng-click="search_()">查 询 </button>
+			</form>
+		</div>
+	</div>
+	<div class="data-div">
+		<div class="row tableHeader">
+            <div class="col-xs-1 ">
+                编号
+            </div>
+			<div class="col-xs-1 ">
+				用户名
+			</div>
+            <!--<div class="col-xs-2 ">
+               地址编号
+            </div>-->
+			<div class="col-xs-1">
+				总 价
+			</div>
+		
+            <div class="col-xs-2">
+                时间
+            </div>
+			<div class="col-xs-2">
+				状 态
+			</div>
+			<div class="col-xs-5">
+				操 作
+			</div>
+		</div>
+		<div class="tablebody">
+			<div class="row" ng-repeat = "x in list_">
+                <div class="col-xs-1">
+					{{x.id}}
+                </div>
+				<div class="col-xs-1 ">
+					{{x.user_name}}
+				</div>
+				<div class="col-xs-1">
+					{{x.sum_price}}
+				</div>
+
+				<div class="col-xs-2">
+					{{x.create_time}}
+				</div>
+
+				<div class="col-xs-2">
+					{{x.status}}
+				</div>
+				<div class="col-xs-5">
+                    <button class="btn btn-success btn-xs " data-toggle="modal" data-target="#reviseUser" ng-click="lookAddr(x)">查看地址</button>
+                    <button class="btn btn-info btn-xs del_" data-toggle="modal" data-target="#deleteUser" ng-click="">查看商品</button>
+                    <!--<button class="btn btn-danger btn-xs " data-toggle="modal" data-target="#reviseUser" data-id="{x->id}" onclick="edit_(this)">更改状态</button>-->
+				</div>
+			</div>
+			<div class="row" ng-show="list_.length==0">
+				<div class="col-xs-12 ">
+					<h3 class="" align="center" style="color:red;font-size:18px">结果不存在</h3>
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<footer class="footer">
+
+	</footer>
+
+	<div class="modal fade" id="reviseUser" role="dialog" aria-labelledby="gridSystemModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="gridSystemModalLabel">地址详情</h4>
+				</div>
+					<div class="modal-body">
+						<div class="container-fluid">
+							<div class="form-group ">
+								<label for="sName" class="col-xs-3 control-label">姓名 ：</label>
+								<div class="col-xs-8">
+									<label class="control-label" >
+										{{address.true_name}}
+									</label> &nbsp;
+
+								</div>
+							</div>
+							<div class="form-group ">
+								<label for="sName" class="col-xs-3 control-label">手机 ：</label>
+								<div class="col-xs-8">
+									<label class="control-label" >
+										{{address.mobile}}
+									</label> &nbsp;
+
+								</div>
+							</div>
+							<div class="form-group ">
+								<label for="sName" class="col-xs-3 control-label">详细地址 ：</label>
+								<div class="col-xs-8">
+									<label class="control-label" >
+										{{address.pcd}} {{address.info}}
+									</label> &nbsp;
+
+								</div>
+							</div>
+
+						</div>
+					</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+
+</div>
+
+{/block}

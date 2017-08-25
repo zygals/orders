@@ -1,0 +1,229 @@
+{extend name='public:base' /}
+{block name="title"}会员列表{/block}
+
+{block name="content"}
+<style>
+	.pagination li.disabled>a, .pagination li.disabled>span{color:inherit;}
+	.pagination li>a, .pagination li>span{color:inherit}
+</style>
+
+<script>
+    var app = angular.module("app1", []);
+    app.controller("controller1", function($scope,$http) {
+        $scope.showAddress = function(item){
+            var address_id = item;
+            $http({
+                method: 'GET',
+                url: "{:url('getAddress')}",
+                params:{address_id:address_id}
+            }).then(function successCallback(response) {
+                $scope.address = response.data;
+            }, function errorCallback(response) {
+                // 请求失败执行代码
+            });
+        }
+
+    });
+</script>
+<div ng-app="app1" ng-controller="controller1" role="tabpanel" class="tab-pane" id="user" style="display:block;">
+	<div class="check-div form-inline">
+        <div class="col-xs-12">
+            <form method="get" action="{:url('index')}">
+
+                <input type="text" id="time_from" name="time_from" value="{$Think.get.time_from}" class="form-control input-sm date_input" placeholder="从哪个日期？如：17-02-03">
+
+                <input type="text" id="time_to" name="time_to" value="{$Think.get.time_to}" class="form-control input-sm date_input" placeholder="到哪个日期?如：17-03-08"">
+                <select name="status" id="" class="form-control">
+                    <option value="">－－选择状态－－</option>
+                    <?php foreach(app\index\model\Order::$arrStatus as $k=>$v){?>
+                        <option value="{$k}" <?php echo isset($_GET['status'])?$k===(int)$_GET['status']?'selected':'':'';?>>{$v}</option>
+                    <?php }?>
+                </select>
+                <button class="btn btn-white btn-xs " type="submit">查 询 </button>
+            </form>
+        </div>
+	</div>
+	<div class="data-div">
+		<div class="row tableHeader">
+            <div class="col-xs-1 ">
+                编号
+            </div>
+			<div class="col-xs-1 ">
+				用户名
+			</div>
+            <!--<div class="col-xs-2 ">
+               地址编号
+            </div>-->
+			<div class="col-xs-1">
+				总 价
+			</div>
+		
+            <div class="col-xs-2">
+                时间
+            </div>
+			<div class="col-xs-2">
+				状 态
+			</div>
+			<div class="col-xs-5">
+				操 作
+			</div>
+		</div>
+		<div class="tablebody">
+			<?php if(count($list)>0){?>
+			<?php foreach($list as $key=>$order){?>
+			<div class="row">
+                <div class="col-xs-1">
+                    {$order->id}
+                </div>
+				<div class="col-xs-1 ">
+					{$order->user_name}
+				</div>
+				<div class="col-xs-1">
+					{$order->sum_price}
+				</div>
+               
+				<div class="col-xs-2">
+					{$order->update_time}
+				</div>
+
+				<div class="col-xs-2">
+					{$order->status}
+				</div>
+				<div class="col-xs-5">
+                    <button class="btn btn-success btn-xs " data-toggle="modal" data-target="#showAdress" data-id="{$order->id}" ng-click="showAddress({$order->address_id})">查看地址</button>
+                    <a href="{:url('order_good/index')}?order_id={$order->id}"><button class="btn btn-info btn-xs del_" data-toggle="modal" data-target="#deleteUser" data-id="{$order->id}" onclick="">查看商品</button></a>
+                    <?php if($order->status=='已支付，未发货' || $order->status=='已发货'){?>
+                    <button class="btn btn-danger btn-xs " data-toggle="modal" data-target="#reviseUser" data-id="{$order->id}" onclick="edit_(this)">更改状态</button><?php }?>
+
+				</div>
+			</div>
+			<?php }?>
+			<?php }else{?>
+				<div class="row">
+					<div class="col-xs-12 ">
+						<h3 class="" align="center" style="color:red;font-size:18px">结果不存在</h3>
+					</div>
+				</div>
+			<?php }?>
+
+		</div>
+
+	</div>
+
+	<!--页码块-->
+	<footer class="footer">
+		{$list->render()}
+	</footer>
+
+	<div class="modal fade" id="showAdress" role="dialog" aria-labelledby="gridSystemModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="gridSystemModalLabel">地址详情</h4>
+				</div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						<div class="form-group ">
+							<label for="sName" class="col-xs-3 control-label">姓名 ：</label>
+							<div class="col-xs-8">
+								<label class="control-label" >
+									{{address.true_name}}
+								</label> &nbsp;
+
+							</div>
+						</div>
+						<div class="form-group ">
+							<label for="sName" class="col-xs-3 control-label">手机 ：</label>
+							<div class="col-xs-8">
+								<label class="control-label" >
+									{{address.mobile}}
+								</label> &nbsp;
+
+							</div>
+						</div>
+						<div class="form-group ">
+							<label for="sName" class="col-xs-3 control-label">详细地址 ：</label>
+							<div class="col-xs-8">
+								<label class="control-label" >
+									{{address.pcd}} {{address.info}}
+								</label> &nbsp;
+
+							</div>
+						</div>
+
+					</div>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+
+	<!--弹出修改用户窗口-->
+	<div class="modal fade" id="reviseUser" role="dialog" aria-labelledby="gridSystemModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="gridSystemModalLabel">确认已经发货？</h4>
+				</div>
+                <form class="form-horizontal" action="{:url('update')}" method="post" id="form_u">
+				<div class="modal-body">
+					<div class="container-fluid">
+                            <input type="hidden" name="id" id="id_u" value="">
+
+                        <div class="form-group ">
+                            <label for="sName" class="col-xs-3 control-label">状态 ：</label>
+                            <div class="row " id="sex_wrap_u">
+
+                            </div>
+                        </div>
+
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-xs btn-white" data-dismiss="modal">取 消</button>
+					<button type="submit" class="btn btn-xs btn-green">保 存</button>
+				</div>
+                </form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+
+	<!--弹出删除用户警告窗口-->
+	<div class="modal fade" id="deleteUser" role="dialog" aria-labelledby="gridSystemModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="gridSystemModalLabel">提示</h4>
+				</div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						确定要禁用该用户？
+					</div>
+				</div>
+				<div class="modal-footer">
+					<form action="{:url('delete')}" method="post" >
+						<input type="hidden" name="id" value="" id="del_id">
+						<button type="button" class="btn btn-xs btn-white" data-dismiss="modal">取 消</button>
+						<button type="submit" class="btn  btn-xs btn-danger">确 定</button>
+					</form>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
+</div>
+<script>
+
+</script>
+
+
+{/block}

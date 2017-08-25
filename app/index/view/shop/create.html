@@ -1,0 +1,213 @@
+{extend name='public:base' /}
+{block name="title"}添加 {/block}
+{block name="content"}
+<style>
+    .control-label{
+        padding-right:10px;
+    }
+</style>
+<script>
+$(function () {
+    //$('.time_sel').datepicker();
+
+
+    $('.ltime_sel').prop("readonly", true).timepicker({
+        timeText: '时间',
+        hourText: '小时',
+        minuteText: '分钟',
+        secondText: '秒',
+        currentText: '现在',
+        closeText: '完成',
+        showSecond: true, //显示秒
+        timeFormat: 'HH:mm:ss' //格式化时间
+    });
+})
+
+</script>
+	<!--弹出添加用户窗口--><form class="form-horizontal" action="{:url('/shop')}" method="post" enctype="multipart/form-data" >
+		<div class="row" >
+			<div class="col-xs-8">
+				<div class="text-center">
+					<!---->
+					<h4 class="modal-title" id="gridSystemModalLabel">添加店铺</h4>
+				</div>
+				<div class="">
+					<div class="container-fluid">
+
+							<div class="form-group ">
+								<label for="sName" class="col-xs-3 control-label">名称：</label>
+								<div class="col-xs-8 ">
+									<input type="text" class="form-control input-sm duiqi" name='name' value="" id="" placeholder="">
+								</div>
+							</div>
+                        <div class="form-group">
+                            <label for="sKnot" class="col-xs-3 control-label">店铺类别：</label>
+                            <div class="col-xs-8">
+                                <select class=" form-control select-duiqi" name="cate_shop_id" id="a_cate_id">
+                                    <option value="">--请选择--</option>
+                                    <?php foreach ($list_cate_shop as $k=>$category){?>
+                                    <option value="{$category->id}">{$category->name}</option>
+                                    <?php }?>
+                                </select>
+
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="sName" class="col-xs-3 control-label ">开业：</label>
+                            <div class="col-xs-8 ">
+                                <input type="time" class="form-control input-sm duiqi time_sel" name='start_time' value="" id="" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="sName" class="col-xs-3 control-label ">关业：</label>
+                            <div class="col-xs-8 ">
+                                <input type="time" class="form-control input-sm duiqi time_sel" name='end_time' value="" id="" placeholder="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="sOrd" class="col-xs-3 control-label">代表图：</label>
+                            <div class="col-xs-4 " id="img_wrap">
+                                <input type="file" class="form-control  duiqi" id="sOrd" name="img" placeholder="">
+                            </div>
+                        </div>
+
+
+
+
+                        <div class="form-group">
+                            <label for="situation" class="col-xs-3 control-label">支持：</label>
+                            <div class="col-xs-8">
+                                <label class="control-label" >
+                                    <input type="checkbox" name="in_or_out[]"  value="1" checked> 堂食</label> &nbsp;
+                                <label class="control-label">
+                                    <input type="checkbox" name="in_or_out[]" value="2" checked >外送</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="situation" class="col-xs-3 control-label">提供：</label>
+                            <div class="col-xs-8">
+                                <label class="control-label" >
+                                    <input type="checkbox" name="functions[]"  value="1" checked>wifi</label> &nbsp;
+                                <label class="control-label">
+                                    <input type="checkbox" name="functions[]" value="2" checked >刷卡</label>
+                                <label class="control-label" >
+                                    <input type="checkbox" name="functions[]"  value="3" checked> 停车位</label>
+                                <label class="control-label" >
+                                    <input type="checkbox" name="functions[]"  value="4" checked> 包箱</label>
+                            </div>
+                        </div>
+                        <div class="form-group" id="" >
+                            <label for="situation" class="col-xs-3 control-label">起送费：</label>
+                            <div class="col-xs-8">
+                                <label class="control-label" >
+                                    <input type="text" name="fee_start_post" class="form-control input-sm duiqi" id="" value="" ></label> &nbsp;<span style="color:red;">元</span>
+
+                            </div>
+                        </div>
+                        <div class="form-group" id="" >
+                            <label for="situation" class="col-xs-3 control-label">配送费：</label>
+                            <div class="col-xs-8">
+                                <label class="control-label" >
+                                    <input type="text" name="fee_post" class="form-control input-sm duiqi" id="" value="" ></label> <span style="color:red;">元</span>&nbsp;
+
+                            </div>
+                        </div>
+                        <div class="form-group" id="" >
+                            <label for="situation" class="col-xs-3 control-label">人均价格：</label>
+                            <div class="col-xs-8">
+                                <label class="control-label" >
+                                    <input type="text" name="avg_price" class="form-control input-sm duiqi" id="" value="" ></label> &nbsp;<span style="color:red;">元</span>
+
+                            </div>
+                        </div>
+
+                        <div class="form-group ">
+                            <label for="sName" class="col-xs-3 control-label">店铺标语　：</label>
+                            <div class="col-xs-8 ">
+                                <textarea name="slogan" class="form-control" style="height:50px">没有最好，只有更好</textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group ">
+                            <label for="sName" class="col-xs-3 control-label">本店介绍　：</label>
+                            <div class="col-xs-8 ">
+                              <textarea name="info" class="form-control" style="height:120px">本店介绍</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group" id="" >
+                            <label for="situation" class="col-xs-3 control-label">电话：</label>
+                            <div class="col-xs-8">
+                                <label class="control-label" >
+                                    <input type="" name="phone" class="form-control input-sm duiqi" id="" value="" ></label> &nbsp;
+
+                            </div>
+                        </div>
+                        <div class="form-group" id="" >
+                            <label for="situation" class="col-xs-3 control-label">微信：</label>
+                            <div class="col-xs-8">
+                                <label class="control-label" >
+                                    <input type="text" name="wx" class="form-control input-sm duiqi" id="" value="" ></label> &nbsp;
+
+                            </div>
+                        </div>
+                        <div class="form-group" id="" >
+                            <label for="situation" class="col-xs-3 control-label">QQ：</label>
+                            <div class="col-xs-8">
+                                <label class="control-label" >
+                                    <input type="text" name="qq" class="form-control input-sm duiqi" id="" value="" ></label> &nbsp;
+
+                            </div>
+                        </div>
+
+					</div>
+				</div>
+				<div class="text-center">
+					<button type="reset" class="btn btn-xs btn-white" data-dismiss="modal">取 消</button>
+					<button type="submit" class="btn btn-xs btn-green">保 存</button>
+				</div>
+			</div>
+		</div>
+</form>
+
+<script>
+    /*$(function () {
+        $('form').bootstrapValidator({
+            fields: {
+                name: {
+                    validators:
+                        {
+                            notEmpty: {
+                                message: '姓名不能为空'
+                            },
+                            stringLength: {
+                                min: 2,
+                                max: 20,
+                                message: '姓名长度必须在2到20位之间'
+                            }
+                        }
+
+                },
+                cate_id: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择分类'
+                        }
+
+
+                    }
+                },
+                brand_id: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择品牌'
+                        }
+                    }
+                }
+            }
+        });
+
+    });*/
+
+</script>
+
+{/block}

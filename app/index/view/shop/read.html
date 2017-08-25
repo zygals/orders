@@ -1,0 +1,183 @@
+{extend name='public:base' /}
+{block name="title"}添加 {/block}
+{block name="content"}
+<style>
+    .control-label{
+        padding-right:10px;
+    }
+</style>
+	<!--弹出添加用户窗口--><form class="form-horizontal" action="{:url('/shop')}" method="post" enctype="multipart/form-data" >
+		<div class="row" >
+			<div class="col-xs-8">
+				<div class="text-center">
+					<!---->
+					<h4 class="modal-title" id="gridSystemModalLabel">详情</h4>
+				</div>
+				<div class="">
+					<div class="container-fluid">
+
+							<div class="form-group ">
+								<label for="sName" class="col-xs-3 control-label">名称：</label>
+								<div class="col-xs-8 "><label class="control-label" >
+									{$row_->name}
+                                </label></div>
+							</div>
+                        <div class="form-group">
+                            <label for="sKnot" class="col-xs-3 control-label">店铺类别：</label>
+                            <div class="col-xs-8">
+                                    <?php foreach ($list_cate_shop as $k=>$category){?>
+                                <div class="col-xs-8 "><label class="control-label" >
+                                    <?php echo $row_->cate_shop_id==$category->id?$category->name:""?>
+                                </label> </div>
+                                    <?php }?>
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="sName" class="col-xs-3 control-label ">开业：</label>
+                            <div class="col-xs-8 "><label class="control-label" >
+                                {$row_->start_time}
+                            </label></div>
+
+                        </div>
+                        <div class="form-group ">
+                            <label for="sName" class="col-xs-3 control-label ">关业：</label>
+                            <div class="col-xs-8 "><label class="control-label" >
+                                {$row_->end_time}
+                            </label></div>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="sOrd" class="col-xs-3 control-label">代表图：</label>
+                            <div class="col-xs-4 " id="img_wrap">
+                                <img src="__IMGURL__{$row_->img_thumb}" alt="没有上传图片" />
+
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="situation" class="col-xs-3 control-label">支持：</label>
+                            <div class="col-xs-8">
+                                <label class="control-label" >
+                                    <input type="checkbox" disabled name="in_or_out[]" readonly value="1" <?php echo in_array(1,$row_->in_or_out)?'checked':""?>> 堂食</label> &nbsp;
+                                <label class="control-label">
+                                    <input type="checkbox" disabled name="in_or_out[]" readonly value="2" <?php echo in_array(2,$row_->in_or_out)?'checked':""?> >外送</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="situation" class="col-xs-3 control-label">提供：</label>
+                            <div class="col-xs-8">
+                                <label class="control-label" >
+                                    <input type="checkbox" disabled name="functions[]"  value="1" <?php echo in_array(1,$row_->functions)?'checked':""?>>wifi</label> &nbsp;
+                                <label class="control-label">
+                                    <input type="checkbox" disabled name="functions[]" value="2" <?php echo in_array(2,$row_->functions)?'checked':""?> >刷卡</label>
+                                <label class="control-label" >
+                                    <input type="checkbox" disabled name="functions[]"  value="3" <?php echo in_array(3,$row_->functions)?'checked':""?>> 停车位</label>
+                                <label class="control-label" >
+                                    <input type="checkbox" disabled name="functions[]"  value="4" <?php echo in_array(4,$row_->functions)?'checked':""?>> 包箱</label>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="" >
+                            <label for="situation" class="col-xs-3 control-label">起送费：</label>
+                            <div class="col-xs-8">
+                                <label class="control-label" >
+                                    {$row_->fee_start_post}</label> &nbsp;
+
+                            </div>
+                        </div>
+                        <div class="form-group" id="" >
+                            <label for="situation" class="col-xs-3 control-label">配送费：</label>
+                            <div class="col-xs-8">
+                                <label class="control-label" >
+                                     {$row_->fee_post}</label> &nbsp;
+
+                            </div>
+                        </div>
+                        <div class="form-group" id="" >
+                            <label for="situation" class="col-xs-3 control-label">人均价格：</label>
+                            <div class="col-xs-8">
+                                <label class="control-label" >
+                                    {$row_->avg_price}
+                                </label> &nbsp;
+
+                            </div>
+                        </div>
+                        <div class="form-group ">
+                            <label for="sName" class="col-xs-3 control-label">店铺标语　：</label>
+                            <div class="col-xs-8 "><label class="control-label" >
+                                {$row_->slogan}
+                            </label></div>
+
+                        </div>
+
+                        <div class="form-group ">
+                            <label for="sName" class="col-xs-3 control-label">本店介绍　：</label>
+                            <div class="col-xs-8 "><label class="control-label" >
+                                {$row_->info}
+                            </label></div>
+
+                        </div>
+                        <div class="form-group" id="" >
+                            <label for="situation" class="col-xs-3 control-label">电话：</label>
+                            <div class="col-xs-8 "><label class="control-label" >
+                                {$row_->phone}
+                            </label></div>
+
+                        </div>
+                        <div class="form-group" id="" >
+                            <label for="situation" class="col-xs-3 control-label">微信：</label>
+                            <div class="col-xs-8 "><label class="control-label" >
+                                {$row_->wx}
+                            </label></div>
+
+                        </div>
+                        <div class="form-group" id="" >
+                            <label for="situation" class="col-xs-3 control-label">QQ：</label>
+                            <div class="col-xs-8 "><label class="control-label" >
+                                {$row_->qq}
+                            </label></div>
+
+                        </div>
+                        <div class="form-group ">
+                            <label for="sName" class="col-xs-3 control-label">地址名称：</label>
+                            <div class="col-xs-8 "><label class="control-label" >
+                                {$row_->addr_name}
+                            </label><p ><em>为保证店铺位置的准确性，请至小程序端完善</em></p></div>
+
+                        </div>
+                        <div class="form-group ">
+                            <label for="sName" class="col-xs-3 control-label">详细地址　：</label>
+                            <div class="col-xs-8 "><label class="control-label" >
+                                {$row_->addr_detail}
+                            </label></div>
+
+                        </div>
+                        <div class="form-group ">
+                            <label for="sName" class="col-xs-3 control-label">地址补充　：</label>
+                            <div class="col-xs-8 "><label class="control-label" >
+                                {$row_->address_more}
+                            </label></div>
+
+                        </div>
+                        <div class="form-group ">
+                            <label for="sName" class="col-xs-3 control-label">经度　：</label>
+                            <div class="col-xs-8 "><label class="control-label" >
+                                {$row_->longitude}
+                            </label></div>
+
+                        </div>
+                        <div class="form-group ">
+                            <label for="sName" class="col-xs-3 control-label">纬度　：</label>
+                            <div class="col-xs-8 "><label class="control-label" >
+                                {$row_->latitude}
+                            </label></div>
+
+                        </div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+</form>
+
+
+{/block}

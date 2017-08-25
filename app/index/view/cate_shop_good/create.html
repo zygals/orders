@@ -1,0 +1,64 @@
+{extend name='public:base' /}
+{block name="title"}添加{/block}
+
+{block name="content"}
+<style>
+    .control-label{
+        padding-right:10px;
+    }
+</style>
+	<!--弹出添加用户窗口--><form class="form-horizontal" action="{:url('/cate')}" method="post" >
+		<div class="row" >
+			<div class="col-xs-8">
+				<div class="text-center">
+					<!---->
+					<h4 class="modal-title" id="gridSystemModalLabel">添加</h4>
+				</div>
+				<div class="">
+					<div class="container-fluid">
+
+							<div class="form-group ">
+								<label for="sName" class="col-xs-3 control-label">名称：</label>
+								<div class="col-xs-8 ">
+                                        <input type="text" class="form-control input-sm duiqi" name='name' value="" id="" placeholder="">
+								</div>
+							</div>
+						<div class="form-group ">
+							<label for="sName" class="col-xs-3 control-label">排序：</label>
+							<div class="col-xs-8 ">
+								<input type="number" class="form-control input-sm duiqi" name='sort' value="0" id="" placeholder="">
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="text-center">
+                    <a href="{:url('/cate')}"><button type="button" class="btn btn-xs btn-white" data-dismiss="modal">返回列表</button></a>
+					<button type="submit" class="btn btn-xs btn-green">保 存</button>
+				</div>
+			</div>
+		</div>
+</form>
+
+<script>
+    $(function () {
+        $('form').bootstrapValidator({
+            fields: {
+                name: {
+                    validators:
+                        {
+                            notEmpty: {
+                                message: '名称不能为空'
+                            }
+
+                        }
+
+                }
+
+            }
+        });
+
+    });
+
+</script>
+
+{/block}

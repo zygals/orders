@@ -1,0 +1,47 @@
+{extend name='public:base' /}
+{block name="title"}后台首页-添加分类{/block}
+
+{block name="search"}{/block}
+{block name="content"}
+<!-- 分类管理模块 -->
+<div role="tabpanel" class="tab-pane active" id="sour">
+    <div class="check-div form-inline row">
+        <div class="col-xs-12"><a href="{:url('/cate_shop/create')}"><button class="btn btn-yellow btn-xs" data-toggle="modal" data-target="#addSource" id="add_btn">添加分类</button></a></div>
+
+    </div>
+    <div class="data-div">
+        <div class="row tableHeader">
+            <div class="col-xs-1 ">
+                编码
+            </div>
+            <div class=" col-xs-2">
+                名称
+            </div>
+            <div class=" col-xs-9">
+                操作
+            </div>
+        </div>
+        <div class="tablebody">
+            <?php foreach($list_ as $key=>$row_){?>
+            <div class="row" >
+                <div class=" col-xs-1">
+                    <?= $row_['id']?>
+                </div>
+                <div  class=" col-xs-2">
+                    <span><?= $row_['name']?></span>
+                </div>
+                <div class=" col-xs-9">
+                    <a href="<?php $str='/cate_shop/'.$row_->id.'/edit'; echo url($str)?>"> <button class="btn btn-success btn-xs update_cate" >修改</button></a>
+                    <a onclick="return confirm('确定删除吗？删除后不可恢复')" href="<?php $str='/cate_shop/'.$row_->id; echo url($str)?>"> <button class="btn btn-danger btn-xs del_cate" > 删除</button></a>
+                </div>
+            </div>
+            <?php }?>
+        </div>
+    </div>
+</div>
+<!-- /.modal -->
+
+<script>
+
+   </script>
+{/block}

@@ -1,0 +1,150 @@
+{extend name='public:base' /}
+{block name="title"}编辑商品 {/block}
+{block name="content"}
+<style>
+    .control-label{
+        padding-right:10px;
+    }
+</style>
+<!--弹出添加用户窗口--><form class="form-horizontal" action="{:url('update')}" method="post" enctype="multipart/form-data" >
+    <input type="hidden" name="id" value="{$row_->id}">
+    <input type="hidden" name="page" value="{$page}">
+    <div class="row" >
+        <div class="col-xs-8">
+            <div class="text-center">
+                <!---->
+                <h4 class="modal-title" id="gridSystemModalLabel">编辑商品</h4>
+            </div>
+            <div class="">
+                <div class="container-fluid">
+
+                    <div class="form-group ">
+                        <label for="sName" class="col-xs-3 control-label">名称：</label>
+                        <div class="col-xs-8 ">
+                            <input type="text" class="form-control input-sm duiqi" name='name' value="{$row_->name}" id="" placeholder="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="sKnot" class="col-xs-3 control-label">分类：</label>
+                        <div class="col-xs-8">
+                            <select class=" form-control select-duiqi" name="cate_id" id="a_cate_id">
+                                <option value="">--请选择--</option>
+                                <?php foreach ($list_category as $k=>$category){?>
+                                <option <?php echo $category->id==$row_->cate_id?"selected":'';?> value="{$category->id}">{$category->name}</option>
+                                <?php }?>
+                            </select>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sOrd" class="col-xs-3 control-label">代表图：</label>
+                        <div class="col-xs-4 " id="img_wrap">
+                            <img src="__IMGURL__{$row_->img_thumb}" alt="没有上传图片" />
+                            <input type="file" class="form-control  duiqi" id="" name="img" placeholder=""><span style="color:red">不选择表示不修改</span>
+                        </div>
+                    </div>
+                    <div class="form-group" id="" >
+                        <label for="situation" class="col-xs-3 control-label">现价：</label>
+                        <div class="col-xs-8">
+                            <label class="control-label" >
+                                <input type="text" name="price_now" class="form-control input-sm duiqi" id="" value="{$row_->price_now}" ></label> &nbsp;
+
+                        </div>
+                    </div>
+                    <div class="form-group" id="" >
+                        <label for="situation" class="col-xs-3 control-label">原价：</label>
+                        <div class="col-xs-8">
+                            <label class="control-label" >
+                                <input type="text" name="price_original" class="form-control input-sm duiqi" id="" value="{$row_->price_original}" ></label> &nbsp;
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="situation" class="col-xs-3 control-label">支持：</label>
+                        <div class="col-xs-8">
+                            <label class="control-label" >
+                                <input type="checkbox" name="in_or_out[]"  value="1" <?php echo in_array(1,$row_->in_or_out)?'checked':""?>> 堂食</label> &nbsp;
+                            <label class="control-label">
+                                <input type="checkbox" name="in_or_out[]" id="waisong"  value="2" <?php echo in_array(2,$row_->in_or_out)?'checked':""?> >外送</label>
+                        </div>
+                    </div>
+                    <div class="form-group" id="fee_canhe_w" style="display: <?php echo in_array(2,$row_->in_or_out)?'block':'none'?>;" >
+                        <label for="situation" class="col-xs-3 control-label">餐盒费：</label>
+                        <div class="col-xs-8">
+                            <label class="control-label">
+                                <input type="text" name="fee_canhe" class="form-control input-sm duiqi"
+                                       placeholder="不写表示0元" value="{$row_->fee_canhe}"></label> &nbsp;
+
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="situation" class="col-xs-3 control-label">状态：</label>
+                        <div class="col-xs-8">
+                            <label class="control-label" >
+                                <input type="radio" name="status"  value="1" <?php echo $row_->status=='正常'?'checked':""?>> 正常</label> &nbsp;
+                            <label class="control-label">
+                                <input type="radio" name="status" value="0" <?php echo $row_->status=='不显示'?'checked':""?> >不显示</label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="text-center">
+                <a href="javascript:history.back()"><button type="button" class="btn btn-xs btn-white" data-dismiss="modal">返回</button></a>
+                <button type="submit" class="btn btn-xs btn-green">保 存</button>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $('#waisong').bind('click', function () {
+        if ($('#fee_canhe_w')[0].style.display == 'block') {
+            $('#fee_canhe_w')[0].style.display='none';
+        }else{
+            $('#fee_canhe_w')[0].style.display='block';
+        }
+
+    });
+    /*$(function () {
+     $('form').bootstrapValidator({
+     fields: {
+     name: {
+     validators:
+     {
+     notEmpty: {
+     message: '姓名不能为空'
+     },
+     stringLength: {
+     min: 2,
+     max: 20,
+     message: '姓名长度必须在2到20位之间'
+     }
+     }
+
+     },
+     cate_id: {
+     validators: {
+     notEmpty: {
+     message: '请选择分类'
+     }
+
+
+     }
+     },
+     brand_id: {
+     validators: {
+     notEmpty: {
+     message: '请选择品牌'
+     }
+     }
+     }
+     }
+     });
+
+     });*/
+
+</script>
+
+{/block}

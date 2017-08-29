@@ -23,7 +23,7 @@ Route::resource('cate','index/CateShopGood');
 //店铺分类所有的路由
 Route::resource('shop','index/Shop');
 
-Route::rule('good/get_goods_default','wx/good/get_goods_default','get',['cache'=>3600]);
+Route::rule('good/get_goods_default','wx/good/get_goods_default','get');
 
 //Route::rule('good/index','wx/good/index','get',['cache'=>3600]);
 

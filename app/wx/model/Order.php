@@ -30,7 +30,11 @@ class Order extends Model {
     //public static $arrStatus  = [-1=>'未支付',1=>'已支付',2=>'已送达',3=>'已完成',4=>'已上菜',0=>'deleted'];
 //－1，1，2，4，3，5，8
     public function getStatusAttr($value) {
-        $status = [-1 => '未支付', 1 => '已支付',11=>'已接单', 2 => '已送达', 3 => '已完成', 4 => '已上菜', 5 => '已取消', 61=>'退款中',62 => '退款成功', 7=>'订单完成并删除',8 => '订单取消并删除', 9 => '管理员删除'];
+        $status = [1=> '未支付', 2 => '已支付', 3 => '申请退款', 4 => '退款成功',5=>'由用户取消'];
+        return $status[$value];
+    }
+    public function getGoodStAttr($value) {
+        $status = [1=> '待做', 2 => '做饭中', 3 => '已做完', 4 => '已送出',5=>'已收到',6=>'已评价'];
         return $status[$value];
     }
 

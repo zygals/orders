@@ -13,18 +13,19 @@ class Order extends Model {
     const IN_ = 1;
     const OUT_ = 2;
 
-    const ORDER_PAID = 1;
-    const ORDER_MAKING = 11;//已接单
-    const ORDER_NO_PAY = -1;
-    const ORDER_TAKEN = 2;
-    const ORDER_ON_DESK = 4;
-    const ORDER_OK = 3;
+    const ORDER_NO_PAY = 1;
+    const ORDER_PAID = 2;
+    const ORDER_REFUND = 3;
+    const ORDER_REFUNDED = 4;
     const ORDER_CANCEL = 5;
-    const ORDER_REFUNDING= 61;
-    const ORDER_REFUND_OK= 62;
-    const ORDER_OK_DEL=7;
-    const ORDER_CANCEL_DEL=8;
-    const ORDER_DEL_BY_ADMIN = 9; //
+    const ORDER_ADMIN_DEL = 0;
+    const GOODST_WAITTING = 1;//1待做
+    const GOODST_MAKING = 2;//2做饭中
+    const GOODST_MKKED = 3;//3已做完
+    const GOODST_SENDIGN = 4;//4已送出
+    const GOODST_TAKEN = 5; //5已收到
+    const GOODST_COMMENT= 6;
+
 
     //public static $arrStatus  = [-1=>'未支付',1=>'已支付',2=>'已送达',3=>'已完成',4=>'已上菜',0=>'deleted'];
 //－1，1，2，4，3，5，8
@@ -40,8 +41,8 @@ class Order extends Model {
         }
         if ($data['status'] == 'paid') {
             $row_->status = self::ORDER_PAID;
-        } elseif ($data['status'] == 'del') {
-            $row_->status = self::ORDER_DEL;
+        } elseif ($data['status'] == 'cancel') {
+            $row_->status = self::ORDER_CANCEL;
         }
         $row_->save();
         return json(['code' => 0, 'msg' => '订单状态为' . $data['status']]);
@@ -61,8 +62,9 @@ class Order extends Model {
         if (is_array($user_id)) {
             return $user_id;
         }
-        $where = ['status' => ['neq', 0]];
-        $list_order = $this->where($where)->order('create_time desc')->select();
+        $where = ['status' => ['neq',self::ORDER_CANCEL],'user_id'=>$user_id];
+        $where2 = ['status' => ['neq',self::ORDER_ADMIN_DEL]];
+        $list_order = $this->where($where)->where($where2)->order('create_time desc')->select();
         foreach ($list_order as $k => $row_order) {
             $list_order_good = (new OrderGood())->getGoods($row_order->id);
             if (is_array($list_order_good)) {

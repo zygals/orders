@@ -8,8 +8,7 @@ class IndexController extends BaseController {
         return $this->fetch('index');
     }
     public function clear_cache(){
-        //  return 12333;
         Cache::clear();
-        $this->success('清除成功！','','',1);
+        $this->success('清除成功！',url('index/index/index'),'',1);
     }
 }

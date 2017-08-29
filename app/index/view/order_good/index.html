@@ -9,16 +9,13 @@
 <div role="tabpanel" class="tab-pane" id="user" style="display:block;">
 	<div class="check-div form-inline">
         <div class="col-xs-12">
-            <h6 align="center">订单编号为 {$Think.get.order_id} 的商品列表</h6>
+            <h6 align="center">订单编号为 {$list[0].trade_no} 的商品列表</h6>
         </div>
 
     </div>
 	<div class="data-div">
 		<div class="row tableHeader">
 
-			<div class="col-xs-1 ">
-              订单编号
-            </div>
             <div class="col-xs-1 ">
                 商品编号
             </div>
@@ -39,18 +36,16 @@
 			</div>
 
 		
-			<div class="col-xs-4">
+			<div class="col-xs-">
 				操 作
 			</div>
 		</div>
 		<div class="tablebody">
 			<?php if(count($list)>0){?>
 			<?php foreach($list as $key=>$row_){?>
-			<div class="row">
-				<div class="col-xs-1" ">
-					{$row_->order_id}
-				</div>
-                <div class="col-xs-1 ">
+			<div class="row cont_nowrap">
+
+                <div class="col-xs-1">
                     {$row_->good_id}
                 </div>
 				<div class="col-xs-2 ">
@@ -69,8 +64,7 @@
 					{$row_->num}
 				</div>
 
-               
-				<div class="col-xs-4">
+				<div class="col-xs-">
                     <a href="{:url('good/edit')}?id={$row_->good_id}"> <button class="btn btn-success btn-xs edit_" data-toggle="modal" data-target="#" data-id="" >商品详情</button></a>
 					 <!-- <button class="btn btn-danger btn-xs del_" data-toggle="modal" data-target="#deleteUser" data-id="{$row_->id}" onclick="del_(this)">查看花卉</button>-->
 				</div>

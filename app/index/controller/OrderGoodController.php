@@ -19,13 +19,8 @@ class OrderGoodController extends BaseController
 
 		$m_users = new OrderGood();
 		$list = $m_users->getAllGoods($request);
-        /*$last_url=''; //返
-        $order_id=$request->get('order_id');
 
-        if($order_id!=null){
-            $last_url = url('order/index')."?order_id=".$request->get('order_id');
-        }*/
-		return $this->fetch('index',['list'=>$list/*,'last_url'=>$last_url*/]);
+		return $this->fetch('index',['list'=>$list]);
     }
 
     /**

@@ -31,8 +31,8 @@
             <form method="get" action="{:url('index')}">
 
                 <input type="text" id="time_from" name="time_from" value="{$Think.get.time_from}" class="form-control input-sm date_input" placeholder="从哪个日期？如：17-02-03">
-
                 <input type="text" id="time_to" name="time_to" value="{$Think.get.time_to}" class="form-control input-sm date_input" placeholder="到哪个日期?如：17-03-08">
+				<input type="text" name="user_name" value="{$Think.get.user_name}" class="form-control input-sm" placeholder="输入用户名搜索">
                 <select name="status" id="" class="form-control">
                     <option value="">－－选择状态－－</option>
                     <?php foreach(app\index\model\Order::$arrStatus as $k=>$v){?>

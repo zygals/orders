@@ -2,6 +2,7 @@
 
 namespace app\index\model;
 
+use app\wx\model\User;
 use think\Model;
 
 class Order extends Model {
@@ -16,29 +17,35 @@ class Order extends Model {
     const GOODST_MAKING = 2;//2做饭中
     const GOODST_SENDIGN = 4;//4已送出
     const GOODST_TAKEN = 5; //5已收到
-    const GOODST_COMMENT= 6;
+    const GOODST_COMMENT = 6;
 
-    public static $arrStatus = [1 => '未支付', 2 => '已支付', 3 => '申请退款', 4 => '退款成功',5=>'由用户取消',6=>'由用户删除'];
+    public static $arrStatus = [1 => '未支付', 2 => '已支付', 3 => '申请退款', 4 => '退款成功', 5 => '由用户取消', 6 => '由用户删除'];
 
     public function getStatusAttr($value) {
-        $status = [1=> '未支付', 2 => '已支付', 3 => '申请退款', 4 => '退款成功',5=>'由用户取消',6=>'由用户删除'];
+        $status = [1 => '未支付', 2 => '已支付', 3 => '申请退款', 4 => '退款成功', 5 => '由用户取消', 6 => '由用户删除'];
         return $status[$value];
     }
+
     public function getGoodStAttr($value) {
-        $status = [1=> '待做', 2 => '已接单', 4 => '已送出',5=>'已收到',6=>'已评价'];
+        $status = [1 => '待做', 2 => '已接单', 4 => '已送出', 5 => '已收到', 6 => '已评价'];
         return $status[$value];
     }
+
     public function getTypeAttr($value) {
-        $status = [1=> '堂食', 2 => '外送'];
+        $status = [1 => '堂食', 2 => '外送'];
         return $status[$value];
     }
 
     //分页查询
     public function getAllOrders($request) {
-        $where = ['order.status'=>['<>',self::ORDER_ADMIN_DEL]];//'order.status'=>3
+        $where = ['order.status' => ['<>', self::ORDER_ADMIN_DEL]];//'order.status'=>3
         $time_from = trim($request->get('time_from'));
         $time_to = trim($request->get('time_to'));
-
+        $user_name = trim($request->get('user_name'));
+        $user_id = User::getUserIdByName($user_name);
+        if(!is_array($user_id)){
+            $where['order.user_id'] = $user_id;
+        }
         if (!empty($time_from)) {
             $where['order.create_time'] = ['gt', strtotime($time_from)];
         }

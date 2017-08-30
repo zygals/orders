@@ -26,8 +26,8 @@ class OrderController extends BaseController
 
 		$m_users = new Order();
 		$list = $m_users->getAllOrders($request);
-
-		return $this->fetch('index',['list'=>$list]);
+        $url = $request->url();
+		return $this->fetch('index',['list'=>$list,'url'=>$url]);
     }
     public function getAddress($address_id){
         return json(Address::get($address_id));
@@ -68,17 +68,12 @@ class OrderController extends BaseController
 		return $id;
     }
 
-    /**
-     * 显示编辑资源表单页.
-     *
-     * @param  int  $id
-     * @return \think\Response
-     */
-    public function edit(Request $request)
-    {
-		$id = $request->get('id');
-		return $this->updateById($id,new Order());
-
+    //改发货状态
+    public  function edit(Request $request){
+        $data = $request->param();
+        $referer = $request->header()['referer'];
+        $row_ = $this->findById($data['id'], new Order());
+        return $this->fetch('',['row_'=>$row_,'act'=>'update','title'=>'改 '.$row_->trade_no.' 发货状态','referer'=>$referer]);
     }
 
     /**
@@ -88,33 +83,36 @@ class OrderController extends BaseController
      * @param  int  $id
      * @return \think\Response
      */
-    public function update(Request $request)
-    {
-		$data = $request->param();
-		/*$res = $this->validate($data,'UsersValidate');
-		if($res!==true){
-			$this->error($res);
-		}*/
-		$m_ = new Order();
+    public function update(Request $request) {
+        $data = $request->param();
+        $referer = $data['referer'];unset($data['referer']);
+        $res = $this->validate($data, 'OrderValidate');
+        if ($res !== true) {
+            $this->error($res);
+        }
 
-        $m_->save($data,['id'=>$data['id']]);
-		$this->redirect('index');
+        if($this->saveById($data['id'],new Order(),$data)){
+
+            $this->success('编辑成功', $referer, '', 1);
+        }else{
+            $this->error('没有改', $referer, '', 1);
+        }
+
     }
-
     /**
      * soft-delete 指定资源
      *
      * @param  int  $id
      * @return \think\Response
      */
-    public function delete(Request $request)
-    {
-        //
-		$id=$request->post('id');
-		$row = User::get($id);
-		$status = $row->getData('status');
-		$status == 1 ? $row->status = 0 : $row->status = 1;
-		$row->save();
-		$this->redirect('index');
+    //用户删除删除后，再由管理员删除
+    public function delete(Request $request) {
+        $data = $request->param();
+
+        if( $this->deleteStatusById($data['id'],new Order(),0)){
+            $this->success('删除成功', $data['url'], '', 1);
+        }else{
+            $this->error('删除失败', $data['url'], '', 3);
+        }
     }
 }

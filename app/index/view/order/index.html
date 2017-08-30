@@ -106,9 +106,13 @@
 <?php if($order->type=='外送'){?>
                     <button class="btn btn-success btn-xs " data-toggle="modal" data-target="#showAdress" data-id="{$order->id}" ng-click="showAddress({$order->address_id})">查看地址</button>
 					<?php }?>
-                    <a href="{:url('order_good/index')}?order_id={$order->id}"><button class="btn btn-info btn-xs del_" data-toggle="modal" data-target="#deleteUser" data-id="{$order->id}" onclick="">查看商品</button></a>
-                    <?php if($order->status=='已支付' || $order->status=='已发货'){?>
-                    <button class="btn btn-danger btn-xs " data-toggle="modal" data-target="#reviseUser" data-id="{$order->id}" onclick="edit_(this)">更改状态</button><?php }?>
+                    <a href="{:url('order_good/index')}?order_id={$order->id}"><button class="btn btn-info btn-xs del_">查看商品</button></a>
+                    <?php if($order->status=='已支付'){?>
+					<a href="{:url('order/edit')}?order_id={$order->id}"><button class="btn btn-info btn-xs del_">更改商品状态</button></a>
+						<?php }?>
+					<?php if($order->status=='由用户取消' || $order->status=='由用户删除' ){?>
+					<button class="btn btn-danger btn-xs " data-toggle="modal" data-target="#deleteUser" data-id="{$order->id}" onclick="del_(this)">删除</button>
+					<?php }?>
 
 				</div>
 			</div>
@@ -129,7 +133,31 @@
 	<footer class="footer">
 		{$list->render()}
 	</footer>
-
+	<div class="modal fade" id="deleteUser" role="dialog" aria-labelledby="gridSystemModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="">提示</h4>
+				</div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						确定要删除?删除后数据不可恢复!
+					</div>
+				</div>
+				<div class="modal-footer">
+					<form action="{:url('delete')}" method="post" >
+						<input type="hidden" name="id" value="" id="del_id">
+						<input type="hidden" name="url" value="{$url}" >
+						<button type="button" class="btn btn-xs btn-white" data-dismiss="modal">取 消</button>
+						<button type="submit" class="btn  btn-xs btn-danger">确 定</button>
+					</form>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
 	<div class="modal fade" id="showAdress" role="dialog" aria-labelledby="gridSystemModalLabel">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -175,43 +203,15 @@
 		<!-- /.modal-dialog -->
 	</div>
 
-	<!--弹出修改用户窗口-->
-	<div class="modal fade" id="reviseUser" role="dialog" aria-labelledby="gridSystemModalLabel">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title" id="">确认已经发货？</h4>
-				</div>
-                <form class="form-horizontal" action="{:url('update')}" method="post" id="form_u">
-				<div class="modal-body">
-					<div class="container-fluid">
-                            <input type="hidden" name="id" id="id_u" value="">
-
-                        <div class="form-group ">
-                            <label  class="col-xs-3 control-label">状态 ：</label>
-                            <div class="row " id="sex_wrap_u">
-
-                            </div>
-                        </div>
-
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-xs btn-white" data-dismiss="modal">取 消</button>
-					<button type="submit" class="btn btn-xs btn-green">保 存</button>
-				</div>
-                </form>
-			</div>
-			<!-- /.modal-content -->
-		</div>
-		<!-- /.modal-dialog -->
-	</div>
-	<!-- /.modal -->
 
 
 </div>
 <script>
+
+    function del_(obj) {
+        var id = $(obj).attr('data-id');
+        $('#del_id').val(id);
+    }
 
 </script>
 

@@ -33,5 +33,42 @@ class BaseController extends Controller {
 		        $this->error('id参数有误');
             }
         }
+    public function findById($id,$model){
+        if(empty($id) || !is_numeric($id)){
+            $this->error('id参数有误');
+        }
+        $row = $model->find($id);
+        if(!$row){
+            $this->error('对象不存在');
+        }
+        return $row;
+    }
+    protected function saveById($id,$model,$data){
+        if(empty($id) || !is_numeric($id)){
+            $this->error('id参数有误');
+        }
+        $row = $model->find($id);
+        if(!$row){
+            $this->error('对象不存在');
+        }
+        if($row->save($data)){
+            return true;
+        }
+        return false;
+    }
+    protected function deleteStatusById($id,$model,$st_del){
+        if(empty($id) || !is_numeric($id)){
+            $this->error('id参数有误');
+        }
+        $row = $model->find($id);
+        if(!$row){
+            $this->error('对象不存在');
+        }
+        $row->status=$st_del;
+        if($row->save()){
+            return true;
+        }
+        return false;
+    }
 
 }

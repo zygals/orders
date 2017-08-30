@@ -85,7 +85,7 @@
                 </div>
 				<div class="col-xs-2">
                     <a href="{:url('edit')}?id={$row_->id}&page={$Think.get.page}"><button class="btn btn-success btn-xs edit_" data-toggle="modal" data-target="#reviseUser" data-id="{$row_->id}" onclick="">修改/查看</button></a>
-					<a onclick="return confirm('确定删除吗？删除后不可恢复')" href="{:url('delete')}?id={$row_->id}">  <button class="btn btn-danger btn-xs del_cate" > 删除</button></a>
+					<button class="btn btn-danger btn-xs " data-toggle="modal" data-target="#deleteUser" data-id="{$row_->id}" onclick="del_(this)">删除</button>
 				</div>
 
 			</div>
@@ -104,10 +104,38 @@
 	<footer class="footer">
 		{$list->render()}
 	</footer>
-
+	<div class="modal fade" id="deleteUser" role="dialog" aria-labelledby="gridSystemModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="">提示</h4>
+				</div>
+				<div class="modal-body">
+					<div class="container-fluid">
+						确定要删除?删除后数据不可恢复!
+					</div>
+				</div>
+				<div class="modal-footer">
+					<form action="{:url('delete')}" method="post" >
+						<input type="hidden" name="id" value="" id="del_id">
+						<input type="hidden" name="url" value="{$url}">
+						<button type="button" class="btn btn-xs btn-white" data-dismiss="modal">取 消</button>
+						<button type="submit" class="btn  btn-xs btn-danger">确 定</button>
+					</form>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
 </div>
 <script>
- 
+
+    function del_(obj) {
+        var id = $(obj).attr('data-id');
+        $('#del_id').val(id);
+    }
 </script>
 
 {/block}

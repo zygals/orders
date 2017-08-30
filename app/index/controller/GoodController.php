@@ -18,8 +18,10 @@ class GoodController extends BaseController
     {
         $data = $request->param();
         $list_ = (new Good)->getAllGoods($data);
+        $url = $request->url();
+
         $categories =  CateShopGood::where(['status'=>1])->order('sort asc')->select();
-        return $this->fetch('',['list'=>$list_,'categories'=>$categories]);
+        return $this->fetch('',['list'=>$list_,'categories'=>$categories,'url'=>$url]);
     }
 
 
@@ -210,9 +212,12 @@ class GoodController extends BaseController
      * @param  int  $id
      * @return \think\Response
      */
-    public function delete($id)
-    {
-        //
-      //  return "$id-delete";
+    public function delete(Request $request)
+    {   $data = $request->param();
+          if( $this->deleteStatusById($data['id'],new Good(),2)){
+            $this->success('删除成功', $data['url'], '', 1);
+        }else{
+            $this->error('删除失败', $data['url'], '', 3);
+        }
     }
 }

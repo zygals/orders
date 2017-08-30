@@ -141,7 +141,7 @@ class Order extends Model {
         if (!$row_order) {
             return ['code' => __LINE__, 'msg' => 'order is not exists'];
         }
-        $list_order_goods = (new OrderGood)->alias('og')->where('order_id', $order_id)->join('good', 'good.id=og.good_id')->field("og.num,good.id good_id,good.name,good.price_now,good.img_thumb")->select();
+        $list_order_goods = (new OrderGood)->alias('og')->where('order_id', $order_id)->join('good', 'good.id=og.good_id')->field("og.num,good.id good_id,good.name,good.price_now,good.img_thumb,good.fee_canhe")->select();
         if (count($list_order_goods) == 0) {
             return ['code' => __LINE__, 'msg' => '订单商品不存在'];
         }

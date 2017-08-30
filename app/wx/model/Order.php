@@ -37,6 +37,10 @@ class Order extends Model {
         $status = [1=> '待做', 2 => '做饭中', 3 => '已做完', 4 => '已送出',5=>'已收到',6=>'已评价'];
         return $status[$value];
     }
+    public function getTypeAttr($value) {
+        $status = [1=> '堂食', 2 => '外送'];
+        return $status[$value];
+    }
 
     public function changeStatus($data) {
         $row_ = self::find(['id' => $data['order_id']]);

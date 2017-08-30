@@ -36,12 +36,7 @@
             <div class="col-xs-6">
                 注册时间
             </div>
-            <!--<div class="col-xs-1">
-                状 态
-            </div>
-            <div class="col-xs-6">
-                操 作
-            </div>-->
+
         </div>
         <div class="tablebody">
             <?php if(count($list)>0){?>
@@ -63,13 +58,7 @@
                     {$user->create_time}
                 </div>
 
-                <!--<div class="col-xs-1">
-                    {$user->status}
-                </div>-->
-                <!--<div class="col-xs-6">
-                    <a href="{:url('address/index')}?user_id={$user->id}"><button class="btn btn-success btn-xs edit_" data-toggle="modal" data-target="#reviseUser" data-id="{$user->id}" onclick="edit_(this)">查看收货地址</button></a>-->
-                <!--					<button class="btn btn-danger btn-xs del_" data-toggle="modal" data-target="#deleteUser" data-id="{$user->id}" onclick="del_(this)">{if condition="$user->getData('status')==1" }禁用{else/}启用{/if}</button>
-                                </div>-->
+
             </div>
             <?php }?>
             <?php }else{?>

@@ -29,4 +29,17 @@ class UserController extends BaseController {
 
         return json(User::registUserByOpenId($open_id));
     }
+    public function save(Request $request)
+    {
+
+        $data = $request->param();
+        $rule = ['username'=>'require'];
+        $res = $this->validate($data,$rule);
+        if(!$res == true){
+            return json(['code'=>__LINE__,'msg'=>$res]);
+        }
+        $m_ = new User();
+        $m_->where(['name'=>$data['username']])->update($data);
+        return json(['code'=>0,'msg'=>'save userinfo ok']);
+    }
 }

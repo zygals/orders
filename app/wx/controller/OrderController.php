@@ -70,7 +70,7 @@ class OrderController extends BaseController {
      *
      * @return \think\Response
      */
-    public function update_status(Request $request) {
+    public function update_st(Request $request) {
         $data = $request->param();
         $rule = ['order_id' => 'require|number','status'=>'require'];
         $msg = ['order_id'=>'缺少 order_id 参数','status'=>'缺少 status 参数'];

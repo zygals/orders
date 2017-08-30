@@ -53,7 +53,7 @@ class Order extends Model {
             $row_->status = self::ORDER_CANCEL;
         }
         $row_->save();
-        return json(['code' => 0, 'msg' => '订单状态为' . $data['status']]);
+        return ['code' => 0, 'msg' => '订单状态为' . $data['status']];
     }
 
     public function addNote($data) {

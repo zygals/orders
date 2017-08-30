@@ -12,16 +12,16 @@ class PayController extends BaseController {
     }
     public function pay_now(Request $request) {
         $rules = ['username' => 'require', 'order_id' => 'require|number'];
-        $data_ = $request->param();
-        $res = $this->validate($data_, $rules);
+        $data= $request->param();
+        $res = $this->validate($data, $rules);
         if ($res !== true) {
             return json(['code' => __LINE__, 'msg' => $res]);
         }
-        $user_id = User::getUserIdByName($data_['username']);
+        $user_id = User::getUserIdByName($data['username']);
         if(is_array($user_id)){
             return json($user_id);
         }
-        $row_order = Order::where(['id'=>$data_['order_id']])->find();
+        $row_order = Order::where(['id'=>$data['order_id']])->find();
         //库存判断
         //$list_order_good = (new OrderGood)->getGoods($row_order->id);
         /*if(count($list_order_good) <=0 ){

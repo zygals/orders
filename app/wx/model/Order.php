@@ -51,6 +51,10 @@ class Order extends Model {
             $row_->status = self::ORDER_PAID;
         } elseif ($data['status'] == 'cancel') {
             $row_->status = self::ORDER_CANCEL;
+        }elseif ($data['status'] == 'taken') {
+            $row_->good_st = self::GOODST_TAKEN;
+        }elseif ($data['status'] == 'del') {
+            $row_->status = self::ORDER_USER_DEL;
         }
         $row_->save();
         return ['code' => 0, 'msg' => '订单状态为' . $data['status']];
@@ -72,7 +76,8 @@ class Order extends Model {
         }
         $where = ['status' => ['neq',self::ORDER_CANCEL],'user_id'=>$user_id];
         $where2 = ['status' => ['neq',self::ORDER_ADMIN_DEL]];
-        $list_order = $this->where($where)->where($where2)->order('create_time desc')->select();
+        $where3 = ['status' => ['neq',self::ORDER_USER_DEL]];
+        $list_order = $this->where($where)->where($where2)->where($where3)->order('create_time desc')->select();
         foreach ($list_order as $k => $row_order) {
             $list_order_good = (new OrderGood())->getGoods($row_order->id);
             if (is_array($list_order_good)) {

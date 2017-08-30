@@ -3,16 +3,13 @@
 namespace app\wx\controller;
 
 use app\wx\model\Order;
-use app\wx\model\Address;
-use MongoDB\Driver\ReadConcern;
+use app\wx\model\OrderGood;
+use app\wx\model\User;
 use think\Request;
-
-
 class PayController extends BaseController {
-    public function pay_ok() {
+    public function pay_ok(Request $request) {
 
     }
-
     public function pay_now(Request $request) {
         $rules = ['username' => 'require', 'order_id' => 'require|number'];
         $data_ = $request->param();
@@ -21,24 +18,30 @@ class PayController extends BaseController {
             return json(['code' => __LINE__, 'msg' => $res]);
         }
         $user_id = User::getUserIdByName($data_['username']);
-        if (is_array($user_id)) {
-            return $user_id;
+        if(is_array($user_id)){
+            return json($user_id);
         }
-        $row_order = Order::where(['id' => $data_['order_id']])->find();
-        if (!$row_order) {
-            return json(['code' => __LINE__, 'msg' => 'order is not exists']);
+        $row_order = Order::where(['id'=>$data_['order_id']])->find();
+        //库存判断
+        //$list_order_good = (new OrderGood)->getGoods($row_order->id);
+        /*if(count($list_order_good) <=0 ){
+            return json(['code' => __LINE__, 'msg' => '商品下架']);
         }
+        foreach ($list_order_good as $item) {
+            if( $item->nums > $item->store){
+                return json(['code' => __LINE__, 'msg' => '订单商品库存不足']);
+            }
+        }*/
         $fee = $row_order->sum_price;
-        $out_trade_no = $row_order->trade_no;//商户订单号
         $appid = config('wx_appid');//如果是公众号 就是公众号的appid
-        $body = 'huahui zhifu';
-        $mch_id = config('wx_mchid');
+        $body = 'xiaochengxu zhifu';
+        $mch_id =  config('wx_mchid');
         $nonce_str = $this->nonce_str();//随机字符串
-        $notify_url = url('order/pay_ok');
-        $openid = User::where(['id' => $user_id])->value('open_id');
-
-        $spbill_create_ip = '211.149.154.103';
-        $total_fee = $fee * 100;//因为充值金额最小是1 而且单位为分 如果是充值1元所以这里需要*100
+        $notify_url = url('pay_ok','order_id='.$row_order->id);
+        $openid = User::where(['id'=>$user_id])->value('open_id');
+        $out_trade_no = $row_order->orderno;//商户订单号
+        $spbill_create_ip = config('wx_spbill_create_ip');
+        $total_fee = $fee * 100;//最不为1
         $trade_type = 'JSAPI';//交易类型 默认
 
         //这里是按照顺序的 因为下面的签名是按照顺序 排序错误 肯定出错
@@ -79,7 +82,7 @@ class PayController extends BaseController {
             $tmp['signType'] = 'MD5';
             $tmp['timeStamp'] = "$time";
 
-            $data['state'] = 1;
+            $data['code'] = 0;
             $data['timeStamp'] = "$time";//时间戳
             $data['nonceStr'] = $nonce_str;//随机字符串
             $data['signType'] = 'MD5';//签名算法，暂支持 MD5
@@ -88,8 +91,8 @@ class PayController extends BaseController {
             $data['out_trade_no'] = $out_trade_no;
 
         } else {
-            $data['state'] = 0;
-            $data['text'] = "错误";
+            $data['code'] = __LINE__;
+            $data['msg'] = "错误";
             $data['RETURN_CODE'] = $array['RETURN_CODE'];
             $data['RETURN_MSG'] = $array['RETURN_MSG'];
         }
@@ -106,6 +109,8 @@ class PayController extends BaseController {
         }
         return $result;
     }
+
+
 
 
 //签名 $data要先排好顺序

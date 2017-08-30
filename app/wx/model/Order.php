@@ -145,7 +145,7 @@ class Order extends Model {
         if (count($list_order_goods) == 0) {
             return ['code' => __LINE__, 'msg' => '订单商品不存在'];
         }
-        if ($data['type'] == self::OUT_) {
+        if ($data['type'] == self::OUT_ || $data['type'] == '外送' ) {
             if (empty($data['username'])) {
                 return ['code' => __LINE__, 'msg' => 'username不能为空'];
             }
@@ -158,7 +158,6 @@ class Order extends Model {
             } else {
                 $address = Address::get(['id' => $row_order->address_id]);
             }
-
             $row_order->fee_post = Shop::where(['id' => 1])->value('fee_post');
             return ['code' => 0, 'msg' => 'get order and order_goods and address ok', 'data' => ['order' => $row_order, 'order_goods' => $list_order_goods, 'address' => $address]];
         }

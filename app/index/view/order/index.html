@@ -104,11 +104,11 @@
 				</div>
 				<div class="col-xs-">
 <?php if($order->type=='外送'){?>
-                    <button class="btn btn-success btn-xs " data-toggle="modal" data-target="#showAdress" data-id="{$order->id}" ng-click="showAddress({$order->address_id})">查看地址</button>
+                    <button class="btn btn-success btn-xs " data-toggle="modal" data-target="#showAdress" data-id="{$order->id}" ng-click="showAddress({$order->address_id})">看地址</button>
 					<?php }?>
-                    <a href="{:url('order_good/index')}?order_id={$order->id}"><button class="btn btn-info btn-xs del_">查看商品</button></a>
+                    <a href="{:url('order_good/index')}?order_id={$order->id}"><button class="btn btn-info btn-xs del_">看商品</button></a>
                     <?php if($order->status=='已支付'){?>
-					<a href="{:url('order/edit')}?order_id={$order->id}"><button class="btn btn-info btn-xs del_">更改商品状态</button></a>
+					<a href="{:url('order/edit')}?id={$order->id}"><button class="btn btn-info btn-xs del_">改状态</button></a>
 						<?php }?>
 					<?php if($order->status=='由用户取消' || $order->status=='由用户删除' ){?>
 					<button class="btn btn-danger btn-xs " data-toggle="modal" data-target="#deleteUser" data-id="{$order->id}" onclick="del_(this)">删除</button>

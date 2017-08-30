@@ -73,7 +73,7 @@ class OrderController extends BaseController
         $data = $request->param();
         $referer = $request->header()['referer'];
         $row_ = $this->findById($data['id'], new Order());
-        return $this->fetch('',['row_'=>$row_,'act'=>'update','title'=>'改 '.$row_->trade_no.' 发货状态','referer'=>$referer]);
+        return $this->fetch('',['row_'=>$row_,'act'=>'update','title'=>'改 '.$row_->trade_no.' 商品状态','referer'=>$referer]);
     }
 
     /**

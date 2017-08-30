@@ -43,7 +43,7 @@ class PayController extends BaseController {
         $nonce_str = $this->nonce_str();//随机字符串
         $notify_url = url('pay_ok','order_id='.$row_order->id);
         $openid = User::where(['id'=>$user_id])->value('open_id');
-        $out_trade_no = $row_order->orderno;//商户订单号
+        $out_trade_no = $row_order->trade_no;//商户订单号
         $spbill_create_ip = config('wx_spbill_create_ip');
         $total_fee = $fee * 100;//最不为1
         $trade_type = 'JSAPI';//交易类型 默认

@@ -26,9 +26,6 @@ class Order extends Model {
     const GOODST_TAKEN = 5; //5已收到
     const GOODST_COMMENT= 6;
 
-
-    //public static $arrStatus  = [-1=>'未支付',1=>'已支付',2=>'已送达',3=>'已完成',4=>'已上菜',0=>'deleted'];
-//－1，1，2，4，3，5，8
     public function getStatusAttr($value) {
         $status = [1=> '未支付', 2 => '已支付', 3 => '申请退款', 4 => '退款成功',5=>'由用户取消'];
         return $status[$value];

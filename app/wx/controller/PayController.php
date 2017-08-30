@@ -32,6 +32,10 @@ class PayController extends BaseController {
                 return json(['code' => __LINE__, 'msg' => '订单商品库存不足']);
             }
         }*/
+        if(!empty($data['note'])){
+            $row_order->note = $data['note'];
+            $row_order->save();
+        }
         $fee = $row_order->sum_price;
         $appid = config('wx_appid');//如果是公众号 就是公众号的appid
         $body = 'xiaochengxu zhifu';

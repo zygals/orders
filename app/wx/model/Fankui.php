@@ -19,7 +19,7 @@ class Fankui extends Model {
         }
         $data_['cont']= $data['cont'];
         $this->save($data_);
-        Order::changeStatus(['status'=>'fankui','order_id'=>$data['order_id']]);
+        (new Order)->changeStatus(['status'=>'fankui','order_id'=>$data['order_id']]);
         return ['code'=>0,'msg'=>'add fankui ok'];
     }
     public static function getList($data){

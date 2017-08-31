@@ -8,7 +8,7 @@ use think\Model;
 class Fankui extends Model {
 
     public  function addFankui($data) {
-        $list_good = OrderGood::getGoods($data['order_id']);
+        $list_good = (new OrderGood)->getGoods($data['order_id']);
         $user_id = User::getUserIdByName($data['user_name']);
 
         $data_['order_id']= $data['order_id'];

@@ -87,6 +87,24 @@ class Order extends Model {
         return ['code' => 0, 'msg' => 'get orders ok', 'data' => $list_order];
 
     }
+    public function getMyOrdersBySt($data) {
+        $user_id = User::getUserIdByName($data['username']);
+        if (is_array($user_id)) {
+            return $user_id;
+        }
+        $where = ['user_id'=>$user_id];
+        $where2=[];
+        if($data['st']=='dai_fankui'){
+            $where2['status'] = 2;
+            $where2['good_st'] = 5;
+        }elseif($data['st']=='refund'){
+            $where2 = "status=3 or status=4";
+        }
+        $list_order = $this->where($where)->where($where2)->order('create_time desc')->select();
+
+        return ['code' => 0, 'msg' => 'get orders ok', 'data' => $list_order];
+
+    }
 
     // 添加订单 use
     public function addOrder($data) {

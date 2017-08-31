@@ -103,7 +103,7 @@
 					{$order->create_time}
 				</div>
 				<div class="col-xs-">
-					<a href="{:url('read')}?id={$order->id}"><button class="btn btn-success btn-xs "  onclick="">查看</button></a>
+					<a href="{:url('read')}?id={$order->id}&type={$order->type}"><button class="btn btn-success btn-xs "  onclick="">查看</button></a>
 <?php if($order->type=='外送'){?>
                     <button class="btn btn-success btn-xs " data-toggle="modal" data-target="#showAdress" data-id="{$order->id}" ng-click="showAddress({$order->address_id})">看地址</button>
 					<?php }?>

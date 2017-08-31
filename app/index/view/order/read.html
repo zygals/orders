@@ -37,8 +37,8 @@
                     </div>
                 <div class="form-group ">
                         <label for="" class="col-xs-3 control-label">商品：</label>
-                        <div class="col-xs-8 ">
-                            <?php foreach($list_good as $row_good){?>
+                    <?php foreach($list_good as $row_good){?>
+                    <div class="col-xs-8 ">
                            <div class="col-xs-4">
                                <img src="__IMGURL__{$row_good->img_thumb}" alt="没有上传图片" width="100"/>
                            </div>
@@ -46,17 +46,16 @@
                                 <span>{$row_good->name}</span><br>
                                 <span>{$row_good->price_now} * {$row_good->num}</span>
                             </div>
-                            <?php }?>
-
-                        </div>
                     </div>
+                    <?php }?>
+                </div>
                     <div class="form-group ">
                         <label for="" class="col-xs-3 control-label">总额：</label>
                         <div class="col-xs-8 ">
                             <label>{$row_order->sum_price}</label>
                         </div>
                     </div>
-
+<?php if(!empty($row_address)){?>
                     <div class="form-group ">
                         <label for="" class="col-xs-3 control-label">收货人信息：</label>
                         <div class="col-xs-8 ">
@@ -74,6 +73,8 @@
                             </div>
                         </div>
                     </div>
+                    <?php }?>
+
                     <div class="form-group ">
                         <label for="" class="col-xs-3 control-label">创建时间：</label>
                         <div class="col-xs-8 ">

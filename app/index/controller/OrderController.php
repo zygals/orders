@@ -65,9 +65,19 @@ class OrderController extends BaseController
      */
     public function read(Request $request) {
         $data = $request->param();
+        $rules = ['id' => 'require|number', 'type' => 'require'];
+        $res = $this->validate($data, $rules);
+        if ($res !== true) {
+            $this->error($res);
+        }
         $row_order = $this->findById($data['id'], new Order());
         $row_user = $this->findById($row_order->user_id,new User());
-        $row_address = $this->findById($row_order->address_id,new Address());
+        $row_address=[];
+        if($data['type']=='外送'){
+
+            $row_address = $this->findById($row_order->address_id,new Address());
+        }
+
         $list_good = (new OrderGood)->getGoods($row_order->id);
         return $this->fetch('', ['row_order' => $row_order,'row_user'=>$row_user,'row_address'=>$row_address, 'list_good'=>$list_good,'title'=>'订单详情 '.$row_order->trade_no]);
     }

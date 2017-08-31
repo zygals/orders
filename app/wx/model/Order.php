@@ -75,14 +75,14 @@ class Order extends Model {
         $where2 = ['status' => ['neq',self::ORDER_ADMIN_DEL]];
         $where3 = ['status' => ['neq',self::ORDER_USER_DEL]];
         $list_order = $this->where($where)->where($where2)->where($where3)->order('create_time desc')->select();
-        foreach ($list_order as $k => $row_order) {
-            $list_order_good = (new OrderGood())->getGoods($row_order->id);
-            if (is_array($list_order_good)) {
-                return $list_order_good;
-            }
-            $list_order[$k]['goods'] = $list_order_good;
-        }
-        return ['code' => 0, 'msg' => 'get order adn order_goods ok', 'data' => $list_order];
+//        foreach ($list_order as $k => $row_order) {
+//            $list_order_good = (new OrderGood())->getGoods($row_order->id);
+//            if (is_array($list_order_good)) {
+//                return $list_order_good;
+//            }
+//            $list_order[$k]['goods'] = $list_order_good;
+//        }
+        return ['code' => 0, 'msg' => 'get orders ok', 'data' => $list_order];
 
     }
 

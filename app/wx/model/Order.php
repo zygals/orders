@@ -38,7 +38,7 @@ class Order extends Model {
         $status = [1=> '堂食', 2 => '外送'];
         return $status[$value];
     }
-
+        //update status or good_st
     public function changeStatus($data) {
         $row_ = self::find(['id' => $data['order_id']]);
         if (!$row_) {
@@ -52,6 +52,8 @@ class Order extends Model {
             $row_->good_st = self::GOODST_TAKEN;
         }elseif ($data['status'] == 'del') {
             $row_->status = self::ORDER_USER_DEL;
+        }elseif ($data['status'] == 'fankui') {
+            $row_->good_st = self::GOODST_COMMENT;
         }
         $row_->save();
         return ['code' => 0, 'msg' => '订单状态为' . $data['status']];

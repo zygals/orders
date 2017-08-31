@@ -79,7 +79,7 @@ class OrderController extends BaseController
         }
 
         $list_good = (new OrderGood)->getGoods($row_order->id);
-        return $this->fetch('', ['row_order' => $row_order,'row_user'=>$row_user,'row_address'=>$row_address, 'list_good'=>$list_good,'title'=>'订单详情 '.$row_order->trade_no]);
+        return $this->fetch('', ['row_order' => $row_order,'row_user'=>$row_user,'row_address'=>$row_address, 'list_good'=>$list_good,'title'=>$row_order->trade_no.' 订单详情 ']);
     }
 
     //改发货状态

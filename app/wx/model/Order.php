@@ -98,7 +98,8 @@ class Order extends Model {
             $where2['status'] = self::ORDER_PAID;
             $where2['good_st'] = self::GOODST_TAKEN;
         }elseif($data['st']=='refund'){
-            $where2 = "(status=".self::ORDER_REFUND ."or status=".self::ORDER_REFUNDED .") and good_st=".self::GOODST_WAITTING;
+            //$where2 = "(status=".self::ORDER_REFUND." or status=".self::ORDER_REFUNDED .") and good_st=".self::GOODST_WAITTING;
+            $where2 = "(status=3 or status=4) and good_st=1 ";
         }
         $list_order = $this->where($where)->where($where2)->order('create_time desc')->select();
 

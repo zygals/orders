@@ -9,7 +9,7 @@ class Fankui extends Model {
 
     public  function addFankui($data) {
         $list_good = (new OrderGood)->getGoods($data['order_id']);
-        $user_id = User::getUserIdByName($data['user_name']);
+        $user_id = User::getUserIdByName($data['username']);
 
         $data_['order_id']= $data['order_id'];
         $data_['user_id']= $user_id;

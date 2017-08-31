@@ -84,7 +84,7 @@
                     {$row_->status}
                 </div>
 				<div class="col-xs-2">
-                    <a href="{:url('edit')}?id={$row_->id}&page={$Think.get.page}"><button class="btn btn-success btn-xs edit_" data-toggle="modal" data-target="#reviseUser" data-id="{$row_->id}" onclick="">修改/查看</button></a>
+                    <a href="{:url('edit')}?id={$row_->id}"><button class="btn btn-success btn-xs edit_" data-toggle="modal" data-target="#reviseUser" data-id="{$row_->id}" onclick="">修改/查看</button></a>
 					<button class="btn btn-danger btn-xs " data-toggle="modal" data-target="#deleteUser" data-id="{$row_->id}" onclick="del_(this)">删除</button>
 				</div>
 

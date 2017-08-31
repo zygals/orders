@@ -131,14 +131,15 @@ class GoodController extends BaseController
      * @param  int  $id
      * @return \think\Response
      */
-    public function edit($id,$page=0)
+    public function edit($id,Request $request)
     {
         $this->valideId($id);
         //$page = ;
         $list_cate = (new CateShopGood())->getAllCate();
+        $referer=$request->header()['referer'];
         $row_ = $this->getById($id,new Good());
         $row_->in_or_out = explode(',',$row_->in_or_out);
-        return $this->fetch('',['row_'=>$row_,'page'=>$page,'list_category'=>$list_cate]);
+        return $this->fetch('',['row_'=>$row_,'referer'=>$referer,'list_category'=>$list_cate]);
     }
 
     /**
@@ -152,6 +153,7 @@ class GoodController extends BaseController
     {
        // return 'update-good'.$id;
         $data = $request->param();
+        $referer = $data['referer'];unset($data['referer']);
         if(is_array($data['in_or_out'])&&in_array(2,$data['in_or_out'])){
             $res = $this->validate($data,'GoodValidate.out_');
             /*   dump($data);
@@ -203,7 +205,7 @@ class GoodController extends BaseController
         }
         $row_ = $this->getById($id,new Good);
         $row_->save($data);
-        $this->success('修改成功',url('index',['page'=>$data['page']]),'',1);//page ?
+        $this->success('编辑成功', $referer, '', 1);
     }
 
     /**

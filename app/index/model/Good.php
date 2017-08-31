@@ -22,7 +22,7 @@ class Good extends model{
         !empty($name)?$where['g.name'] = ['like',"%$name%"]:'';
 
 
-        $list=$this->order('g.create_time desc')->alias('g')->join('cate_shop_good cate','g.cate_id=cate.id','left')->where($where)->field('g.*,cate.name as cate_name')->paginate(config('paginate.list_rows'));
+        $list=$this->order('g.create_time desc')->alias('g')->join('cate_shop_good cate','g.cate_id=cate.id','left')->where($where)->field('g.*,cate.name as cate_name')->paginate();
         //dump($list);
 
         return $list;

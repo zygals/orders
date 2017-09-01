@@ -135,13 +135,14 @@ class PayController extends BaseController {
        // $post['body'] = $body;
         $post['mch_id'] = $mch_id;
         $post['nonce_str'] = $nonce_str;//随机字符串
-       // $post['op_user_id'] = $mch_id;
+        $post['op_user_id'] = $mch_id;
        //$post['notify_url'] = $notify_url;
         //$post['openid'] = $openid;
         $post['out_refund_no'] = $out_refund_no;
         $post['out_trade_no'] = $out_trade_no;
        // $post['spbill_create_ip'] = $spbill_create_ip;//终端的ip
         $post['total_fee'] = $total_fee;//总金额 最低为一块钱 必须是整数
+        $post['refund_fee'] = $total_fee;//总金额 最低为一块钱 必须是整数
         //$post['trade_type'] = $trade_type;
         $sign = (new Pay())->sign($post);//签名            <notify_url>' . $notify_url . '</notify_url>
         $post_xml = '<xml>
@@ -149,9 +150,8 @@ class PayController extends BaseController {
            <mch_id>' . $mch_id . '</mch_id>
            <nonce_str>' .$nonce_str . '</nonce_str>
            <op_user_id>'. $mch_id.'</op_user_id>
-           <out_trade_no>' . $out_trade_no . '</out_trade_no>
            <out_refund_no>'.$out_refund_no.'</out_refund_no>
-           <spbill_create_ip>' . $spbill_create_ip . '</spbill_create_ip>
+           <out_trade_no>' . $out_trade_no . '</out_trade_no>
            <total_fee>' . $total_fee . '</total_fee>
            <refund_fee>' . $total_fee . '</refund_fee>
            <sign>' . $sign . '</sign>

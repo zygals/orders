@@ -22,7 +22,7 @@ class Order extends Model {
     public static $arrStatus = [1 => '未支付', 2 => '已支付', 3 => '退款中', 4 => '退款成功', 5 => '由用户取消', 6 => '由用户删除'];
 
     public function getStatusAttr($value) {
-        $status = [1 => '未支付', 2 => '已支付', 3 => '申请退款', 4 => '退款成功', 5 => '由用户取消', 6 => '由用户删除'];
+        $status = [1 => '未支付', 2 => '已支付', 3 => '退款中', 4 => '退款成功', 5 => '由用户取消', 6 => '由用户删除'];
         return $status[$value];
     }
 

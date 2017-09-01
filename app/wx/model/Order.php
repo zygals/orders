@@ -3,11 +3,6 @@
 namespace app\wx\model;
 
 use think\Model;
-use app\wx\model\User;
-use app\wx\model\Shop;
-use app\wx\model\OrderGood;
-use app\wx\model\Address;
-use think\Request;
 
 class Order extends Model {
     const IN_ = 1;
@@ -95,7 +90,7 @@ class Order extends Model {
         foreach($list_order as $row_order){
             if(!empty($row_order->refund_no) && $row_order->status==self::ORDER_REFUND){
                 $res_refund = (new Pay())->refund_query($row_order->id);
-                    if($res_refund==0){
+                    if($res_refund['code']==0){
                         if($res_refund['REFUND_STATUS']!='PROCESSING'){
                             if($res_refund['REFUND_STATUS']=='SUCCESS'){
                                 $row_order->status = self::ORDER_REFUNDED;
@@ -109,6 +104,7 @@ class Order extends Model {
 
                     }else{
                         $row_order->note = $row_order->note.' '.$res_refund['msg'];
+                        $row_order->save();
                     }
 
             }

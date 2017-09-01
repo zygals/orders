@@ -96,7 +96,6 @@ class PayController extends BaseController {
     }
 
     public function refund(Request $request){
-//        return getcwd();
         $rules = ['username' => 'require', 'order_id' => 'require|number'];
         $data= $request->param();
         $res = $this->validate($data, $rules);
@@ -121,29 +120,19 @@ class PayController extends BaseController {
         $appid = config('wx_appid');//如果是公众号 就是公众号的appid
         $mch_id =  config('wx_mchid');
         $nonce_str = (new Pay())->nonce_str();//随机字符串
-        //$body = 'xiaochengxu tuikuan';
-       // $notify_url = url('pay_ok');
-       // $openid = User::where(['id'=>$user_id])->value('open_id');
         $out_refund_no = $row_order->refund_no;//商户订单号
         $out_trade_no = $row_order->trade_no;//商户订单号
-        $spbill_create_ip = config('wx_spbill_create_ip');
         $total_fee = $fee * 100;//最不为1
-        //$trade_type = 'JSAPI';//交易类型 默认
 
         //这里是按照顺序的 因为下面的签名是按照顺序 排序错误 肯定出错
         $post['appid'] = $appid;
-       // $post['body'] = $body;
         $post['mch_id'] = $mch_id;
         $post['nonce_str'] = $nonce_str;//随机字符串
         $post['op_user_id'] = $mch_id;
-       //$post['notify_url'] = $notify_url;
-        //$post['openid'] = $openid;
         $post['out_refund_no'] = $out_refund_no;
         $post['out_trade_no'] = $out_trade_no;
-       // $post['spbill_create_ip'] = $spbill_create_ip;//终端的ip
         $post['refund_fee'] = $total_fee;//总金额 最低为一块钱 必须是整数
         $post['total_fee'] = $total_fee;//总金额 最低为一块钱 必须是整数
-        //$post['trade_type'] = $trade_type;
         $sign = (new Pay())->sign($post);//签名            <notify_url>' . $notify_url . '</notify_url>
         $post_xml = '<xml>
            <appid>' . $appid . '</appid>
@@ -159,7 +148,6 @@ class PayController extends BaseController {
         $url = 'https://api.mch.weixin.qq.com/secapi/pay/refund';
         $xml = (new Pay())->http_post($url, $post_xml);
         $array = (new Pay())->xml($xml);//全要大写
-       // return json($array);
         if ($array['RETURN_CODE'] == 'SUCCESS' ) {
             if ($array['RESULT_CODE'] == 'SUCCESS' ) {
                 $row_order->status = Order::ORDER_REFUND;
@@ -180,5 +168,10 @@ class PayController extends BaseController {
         return json($ret);
 
     }
+    public function que(Request $request){
+        $data = $request->param();
+        return json((new Pay)->refund_query($data['order_id']));
+    }
+
 
 }

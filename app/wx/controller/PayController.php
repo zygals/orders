@@ -96,6 +96,7 @@ class PayController extends BaseController {
     }
 
     public function refund(Request $request){
+//        return getcwd();
         $rules = ['username' => 'require', 'order_id' => 'require|number'];
         $data= $request->param();
         $res = $this->validate($data, $rules);
@@ -110,8 +111,11 @@ class PayController extends BaseController {
         if(!$row_order){
             return json(['code' => __LINE__, 'msg' => '要退款的订单不存在']);
         }
-        $row_order->refund_no = Order::makeRefundNo($data['username']);
-        $row_order->save();
+        if(empty($row_order->refund_no)){
+            $row_order->refund_no = Order::makeRefundNo($data['username']);
+            $row_order->save();
+
+        }
 
         $fee = $row_order->sum_price;
         $appid = config('wx_appid');//如果是公众号 就是公众号的appid
@@ -142,7 +146,6 @@ class PayController extends BaseController {
         $sign = (new Pay())->sign($post);//签名            <notify_url>' . $notify_url . '</notify_url>
         $post_xml = '<xml>
            <appid>' . $appid . '</appid>
-
            <mch_id>' . $mch_id . '</mch_id>
            <nonce_str>' .$nonce_str . '</nonce_str>
            <op_user_id>'. $mch_id.'</op_user_id>
@@ -156,9 +159,9 @@ class PayController extends BaseController {
            <sign>' . $sign . '</sign>
         </xml> ';
         $url = 'https://api.mch.weixin.qq.com/secapi/pay/refund';
-        $xml = (new Pay())->http_request($url, $post_xml);
+        $xml = (new Pay())->http_post($url, $post_xml);
         $array = (new Pay())->xml($xml);//全要大写
-        return json($array);
+       // return json($array);
         if ($array['RETURN_CODE'] == 'SUCCESS' && $array['RESULT_CODE'] == 'SUCCESS') {
             $row_order->status=Order::ORDER_REFUND;
             $row_order->save();

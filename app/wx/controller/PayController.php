@@ -141,8 +141,8 @@ class PayController extends BaseController {
         $post['out_refund_no'] = $out_refund_no;
         $post['out_trade_no'] = $out_trade_no;
        // $post['spbill_create_ip'] = $spbill_create_ip;//终端的ip
-        $post['total_fee'] = $total_fee;//总金额 最低为一块钱 必须是整数
         $post['refund_fee'] = $total_fee;//总金额 最低为一块钱 必须是整数
+        $post['total_fee'] = $total_fee;//总金额 最低为一块钱 必须是整数
         //$post['trade_type'] = $trade_type;
         $sign = (new Pay())->sign($post);//签名            <notify_url>' . $notify_url . '</notify_url>
         $post_xml = '<xml>
@@ -152,8 +152,8 @@ class PayController extends BaseController {
            <op_user_id>'. $mch_id.'</op_user_id>
            <out_refund_no>'.$out_refund_no.'</out_refund_no>
            <out_trade_no>' . $out_trade_no . '</out_trade_no>
-           <total_fee>' . $total_fee . '</total_fee>
            <refund_fee>' . $total_fee . '</refund_fee>
+           <total_fee>' . $total_fee . '</total_fee>
            <sign>' . $sign . '</sign>
         </xml> ';
         $url = 'https://api.mch.weixin.qq.com/secapi/pay/refund';

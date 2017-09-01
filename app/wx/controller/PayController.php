@@ -78,21 +78,21 @@ class PayController extends BaseController {
             $tmp['signType'] = 'MD5';
             $tmp['timeStamp'] = "$time";
 
-            $data['code'] = 0;
-            $data['timeStamp'] = "$time";//时间戳
-            $data['nonceStr'] = $nonce_str;//随机字符串
-            $data['signType'] = 'MD5';//签名算法，暂支持 MD5
-            $data['package'] = 'prepay_id=' . $array['PREPAY_ID'];//统一下单接口返回的 prepay_id 参数值，提交格式如：prepay_id=*
-            $data['paySign'] = (new Pay())->sign($tmp);//签名,具体签名方案参见微信公众号支付帮助文档;
-            $data['out_trade_no'] = $out_trade_no;
+            $ret['code'] = 0;
+            $ret['timeStamp'] = "$time";//时间戳
+            $ret['nonceStr'] = $nonce_str;//随机字符串
+            $ret['signType'] = 'MD5';//签名算法，暂支持 MD5
+            $ret['package'] = 'prepay_id=' . $array['PREPAY_ID'];//统一下单接口返回的 prepay_id 参数值，提交格式如：prepay_id=*
+            $ret['paySign'] = (new Pay())->sign($tmp);//签名,具体签名方案参见微信公众号支付帮助文档;
+            $ret['out_trade_no'] = $out_trade_no;
 
         } else {
-            $data['code'] = __LINE__;
-            $data['msg'] = "错误";
-            $data['RETURN_CODE'] = $array['RETURN_CODE'];
-            $data['RETURN_MSG'] = $array['RETURN_MSG'];
+            $ret['code'] = __LINE__;
+            $ret['msg'] = "错误";
+            $ret['RETURN_CODE'] = $array['RETURN_CODE'];
+            $ret['RETURN_MSG'] = $array['RETURN_MSG'];
         }
-        echo json_encode($data);
+        echo json_encode($ret);
     }
 
     public function refund(Request $request){
@@ -166,20 +166,20 @@ class PayController extends BaseController {
             if ($array['RESULT_CODE'] == 'SUCCESS' ) {
                 $row_order->status = Order::ORDER_REFUND;
                 $row_order->save();
-                $data['code'] = 0;
-                $data['msg'] = "退款申请接收成功，结果通过退款查询接口查询";
+                $ret['code'] = 0;
+                $ret['msg'] = "退款申请接收成功，结果通过退款查询接口查询";
             }else{
-                $data['code'] = __LINE__;
-                $data['msg'] = "提交业务失败";
+                $ret['code'] = __LINE__;
+                $ret['msg'] = "提交业务失败";
             }
 
         } else {
-            $data['code'] = __LINE__;
-            $data['msg'] = "错误";
-            $data['RETURN_CODE'] = $array['RETURN_CODE'];
-            $data['RETURN_MSG'] = $array['RETURN_MSG'];
+            $ret['code'] = __LINE__;
+            $ret['msg'] = "错误";
+            $ret['RETURN_CODE'] = $array['RETURN_CODE'];
+            $ret['RETURN_MSG'] = $array['RETURN_MSG'];
         }
-        return json($data);
+        return json($ret);
 
     }
 

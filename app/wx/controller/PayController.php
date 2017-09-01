@@ -110,7 +110,7 @@ class PayController extends BaseController {
         if(!$row_order){
             return json(['code' => __LINE__, 'msg' => '要退款的订单不存在']);
         }
-        $row_order->refund_no = Order::makeRefundNo();
+        $row_order->refund_no = Order::makeRefundNo($data['username']);
         $row_order->save();
 
         $fee = $row_order->sum_price;

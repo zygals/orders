@@ -194,5 +194,9 @@ class Order extends Model {
     public function makeTradeNo($username) {
         return date('mdHis', time()) . mt_rand(10, 99) . '_' . $username;
     }
+    //生成退款订单号
+    public static function makeRefundNo($username) {
+        return date('mdHis', time()) . mt_rand(10, 99) . '_' . $username.'_refund';
+    }
 
 }

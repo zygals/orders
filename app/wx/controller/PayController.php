@@ -95,5 +95,80 @@ class PayController extends BaseController {
         echo json_encode($data);
     }
 
+    public function refund(Request $request){
+        $rules = ['username' => 'require', 'order_id' => 'require|number'];
+        $data= $request->param();
+        $res = $this->validate($data, $rules);
+        if ($res !== true) {
+            return json(['code' => __LINE__, 'msg' => $res]);
+        }
+        $user_id = User::getUserIdByName($data['username']);
+        if(is_array($user_id)){
+            return json($user_id);
+        }
+        $row_order = Order::where(['id'=>$data['order_id']])->find();
+        if(!$row_order){
+            return json(['code' => __LINE__, 'msg' => '要退款的订单不存在']);
+        }
+        $row_order->refund_no = Order::makeRefundNo();
+        $row_order->save();
+
+        $fee = $row_order->sum_price;
+        $appid = config('wx_appid');//如果是公众号 就是公众号的appid
+        $mch_id =  config('wx_mchid');
+        $nonce_str = (new Pay())->nonce_str();//随机字符串
+        $body = 'xiaochengxu tuikuan';
+        $notify_url = url('pay_ok');
+        $openid = User::where(['id'=>$user_id])->value('open_id');
+        $out_refund_no = $row_order->refund_no;//商户订单号
+        $out_trade_no = $row_order->trade_no;//商户订单号
+        $spbill_create_ip = config('wx_spbill_create_ip');
+        $total_fee = $fee * 100;//最不为1
+        $trade_type = 'JSAPI';//交易类型 默认
+
+        //这里是按照顺序的 因为下面的签名是按照顺序 排序错误 肯定出错
+        $post['appid'] = $appid;
+        $post['body'] = $body;
+        $post['mch_id'] = $mch_id;
+        $post['nonce_str'] = $nonce_str;//随机字符串
+        $post['notify_url'] = $notify_url;
+        $post['openid'] = $openid;
+        $post['out_trade_no'] = $out_trade_no;
+        $post['spbill_create_ip'] = $spbill_create_ip;//终端的ip
+        $post['total_fee'] = $total_fee;//总金额 最低为一块钱 必须是整数
+        $post['trade_type'] = $trade_type;
+        $sign = (new Pay())->sign($post);//签名            <notify_url>' . $notify_url . '</notify_url>
+        $post_xml = '<xml>
+           <appid>' . $appid . '</appid>
+
+           <mch_id>' . $mch_id . '</mch_id>
+           <nonce_str>' . $nonce_str . '</nonce_str>
+            <notify_url>' . $notify_url . '</notify_url>
+           <openid>' . $openid . '</openid>
+           <out_trade_no>' . $out_trade_no . '</out_trade_no>
+           <out_refund_no>'.$out_refund_no.'</out_refund_no>
+           <spbill_create_ip>' . $spbill_create_ip . '</spbill_create_ip>
+           <total_fee>' . $total_fee . '</total_fee>
+           <refund_fee>' . $total_fee . '</refund_fee>
+           <trade_type>' . $trade_type . '</trade_type>
+           <sign>' . $sign . '</sign>
+        </xml> ';
+        $url = 'https://api.mch.weixin.qq.com/secapi/pay/refund';
+        $xml = (new Pay())->http_request($url, $post_xml);
+        $array = (new Pay())->xml($xml);//全要大写
+        if ($array['RETURN_CODE'] == 'SUCCESS' && $array['RESULT_CODE'] == 'SUCCESS') {
+            $row_order->status=Order::ORDER_REFUND;
+            $row_order->save();
+            $data['code'] = 0;
+            $data['msg'] = "退款申请接收成功，结果通过退款查询接口查询";
+        } else {
+            $data['code'] = __LINE__;
+            $data['msg'] = "错误";
+            $data['RETURN_CODE'] = $array['RETURN_CODE'];
+            $data['RETURN_MSG'] = $array['RETURN_MSG'];
+        }
+        return json($data);
+
+    }
 
 }

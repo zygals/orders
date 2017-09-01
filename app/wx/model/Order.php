@@ -17,6 +17,8 @@ class Order extends Model {
     const ORDER_PAID = 2;
     const ORDER_REFUND = 3;
     const ORDER_REFUNDED = 4;
+    const ORDER_REFUND_FAIL = 6;
+    const ORDER_REFUND_CHANGE = 7;
     const ORDER_CANCEL = 5;
     const ORDER_USER_DEL = 6;
     const ORDER_ADMIN_DEL = 0;
@@ -27,7 +29,7 @@ class Order extends Model {
     const GOODST_COMMENT= 6;
 
     public function getStatusAttr($value) {
-        $status = [1=> '未支付', 2 => '已支付', 3 => '申请退款', 4 => '退款成功',5=>'由用户取消'];
+        $status = [1=> '未支付', 2 => '已支付', 3 => '退款中', 4 => '退款成功',5=>'由用户取消',6=>'退款失败',7=>'转入代发'];
         return $status[$value];
     }
     public function getGoodStAttr($value) {
@@ -90,7 +92,27 @@ class Order extends Model {
             }
             $list_order = $this->where($where)->where($where2)->order('create_time desc')->paginate(5);
         }
+        foreach($list_order as $row_order){
+            if(!empty($row_order->refund_no) && $row_order->status==self::ORDER_REFUND){
+                $res_refund = (new Pay())->refund_query($row_order->id);
+                    if($res_refund==0){
+                        if($res_refund['REFUND_STATUS']!='PROCESSING'){
+                            if($res_refund['REFUND_STATUS']=='SUCCESS'){
+                                $row_order->status = self::ORDER_REFUNDED;
+                            }elseif($res_refund['REFUND_STATUS']=='FAIL'){
+                                $row_order->status = self::ORDER_REFUND_FAIL;
+                            }elseif($res_refund['REFUND_STATUS']=='CHANGE'){
+                                $row_order->status = self::ORDER_REFUND_CHANGE;
+                            }
+                            $row_order->save();
+                        }
 
+                    }else{
+                        $row_order->note = $row_order->note.' '.$res_refund['msg'];
+                    }
+
+            }
+        }
 //        foreach ($list_order as $k => $row_order) {
 //            $list_order_good = (new OrderGood())->getGoods($row_order->id);
 //            if (is_array($list_order_good)) {

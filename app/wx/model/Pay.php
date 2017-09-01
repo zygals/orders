@@ -114,9 +114,6 @@ class Pay extends model{
         $mch_id =  config('wx_mchid');
         $nonce_str = (new Pay())->nonce_str();//随机字符串
         $out_refund_no = $row_order->refund_no;//商户订单号
-        $out_trade_no = $row_order->trade_no;//商户订单号
-        $total_fee = $fee * 100;//最不为1
-
         //这里是按照顺序的 因为下面的签名是按照顺序 排序错误 肯定出错
         $post['appid'] = $appid;
         $post['mch_id'] = $mch_id;
@@ -133,12 +130,13 @@ class Pay extends model{
         $url = 'https://api.mch.weixin.qq.com/pay/refundquery';
         $xml = $this->http_request($url, $post_xml);
         $array = $this->xml($xml);//全要大写
-        return $array;
+        //return $array;
         if ($array['RETURN_CODE'] == 'SUCCESS' ) {
             if ($array['RESULT_CODE'] == 'SUCCESS' ) {
 
                 $ret['code'] = 0;
-                $ret['msg'] = "退款申请接收成功，结果通过退款查询接口查询";
+                $ret['msg'] = 'refund query ok';
+                $ret['REFUND_STATUS'] = $array['REFUND_STATUS_0'];
             }else{
                 $ret['code'] = __LINE__;
                 $ret['msg'] = "提交业务失败";
@@ -146,9 +144,8 @@ class Pay extends model{
 
         } else {
             $ret['code'] = __LINE__;
-            $ret['msg'] = "错误";
+            $ret['msg'] = $array['RETURN_MSG'];;
             $ret['RETURN_CODE'] = $array['RETURN_CODE'];
-            $ret['RETURN_MSG'] = $array['RETURN_MSG'];
         }
         return $ret;
 

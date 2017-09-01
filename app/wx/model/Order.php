@@ -73,10 +73,24 @@ class Order extends Model {
         if (is_array($user_id)) {
             return $user_id;
         }
-        $where = ['status' => ['neq',self::ORDER_CANCEL],'user_id'=>$user_id];
-        $where2 = ['status' => ['neq',self::ORDER_ADMIN_DEL]];
-        $where3 = ['status' => ['neq',self::ORDER_USER_DEL]];
-        $list_order = $this->where($where)->where($where2)->where($where3)->order('create_time desc')->paginate(10);
+        if(empty($data['st'])){
+            $where = ['status' => ['neq',self::ORDER_CANCEL],'user_id'=>$user_id];
+            $where2 = ['status' => ['neq',self::ORDER_ADMIN_DEL]];
+            $where3 = ['status' => ['neq',self::ORDER_USER_DEL]];
+            $list_order = $this->where($where)->where($where2)->where($where3)->order('create_time desc')->paginate(10);
+        }else{
+            $where = ['user_id'=>$user_id];
+            $where2=[];
+            if($data['st']=='dai_fankui'){
+                $where2['status'] = self::ORDER_PAID;
+                $where2['good_st'] = self::GOODST_TAKEN;
+            }elseif($data['st']=='refund'){
+
+                $where2 = "(status=3 or status=4) and good_st=1";
+            }
+            $list_order = $this->where($where)->where($where2)->order('create_time desc')->paginate(2);
+        }
+
 //        foreach ($list_order as $k => $row_order) {
 //            $list_order_good = (new OrderGood())->getGoods($row_order->id);
 //            if (is_array($list_order_good)) {
@@ -87,25 +101,7 @@ class Order extends Model {
         return ['code' => 0, 'msg' => 'get orders ok', 'data' => $list_order];
 
     }
-    public function getMyOrdersBySt($data) {
-        $user_id = User::getUserIdByName($data['username']);
-        if (is_array($user_id)) {
-            return $user_id;
-        }
-        $where = ['user_id'=>$user_id];
-        $where2=[];
-        if($data['st']=='dai_fankui'){
-            $where2['status'] = self::ORDER_PAID;
-            $where2['good_st'] = self::GOODST_TAKEN;
-        }elseif($data['st']=='refund'){
-            //$where2 = "(status=".self::ORDER_REFUND." or status=".self::ORDER_REFUNDED .") and good_st=".self::GOODST_WAITTING;
-            $where2 = "(status=3 or status=4) and good_st=1";
-        }
-        $list_order = $this->where($where)->where($where2)->order('create_time desc')->select();
 
-        return ['code' => 0, 'msg' => 'get orders ok', 'data' => $list_order];
-
-    }
 
     // 添加订单 use
     public function addOrder($data) {

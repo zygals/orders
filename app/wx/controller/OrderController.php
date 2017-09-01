@@ -20,16 +20,7 @@ class OrderController extends BaseController {
         }
         return json((new Order)->getMyOrders($data));
     }
-    public function get_by_st(Request $request){
-        $data = $request->param();
-        $rules = ['username' => 'require','st'=>'require'];
-        $msg = ['username' => '用户没登录'];
-        $res = $this->validate($data, $rules, $msg);
-        if (true !== $res) {
-            return json(['code' => __LINE__, 'msg' => $res]);
-        }
-        return json((new Order)->getMyOrdersBySt($data));
-    }
+
     //添加 订单
     public function add_order(Request $request) {
         $data = $request->param();

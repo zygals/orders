@@ -124,33 +124,35 @@ class PayController extends BaseController {
         $out_trade_no = $row_order->trade_no;//商户订单号
         $spbill_create_ip = config('wx_spbill_create_ip');
         $total_fee = $fee * 100;//最不为1
-        $trade_type = 'JSAPI';//交易类型 默认
+        //$trade_type = 'JSAPI';//交易类型 默认
 
         //这里是按照顺序的 因为下面的签名是按照顺序 排序错误 肯定出错
         $post['appid'] = $appid;
-        $post['body'] = $body;
+       // $post['body'] = $body;
         $post['mch_id'] = $mch_id;
         $post['nonce_str'] = $nonce_str;//随机字符串
-        $post['notify_url'] = $notify_url;
+        $post['op_user_id'] = $mch_id;
+       //$post['notify_url'] = $notify_url;
         $post['openid'] = $openid;
+        $post['out_refund_no'] = $out_refund_no;
         $post['out_trade_no'] = $out_trade_no;
-        $post['spbill_create_ip'] = $spbill_create_ip;//终端的ip
+       // $post['spbill_create_ip'] = $spbill_create_ip;//终端的ip
         $post['total_fee'] = $total_fee;//总金额 最低为一块钱 必须是整数
-        $post['trade_type'] = $trade_type;
+        //$post['trade_type'] = $trade_type;
         $sign = (new Pay())->sign($post);//签名            <notify_url>' . $notify_url . '</notify_url>
         $post_xml = '<xml>
            <appid>' . $appid . '</appid>
 
            <mch_id>' . $mch_id . '</mch_id>
-           <nonce_str>' . $nonce_str . '</nonce_str>
-            <notify_url>' . $notify_url . '</notify_url>
+           <nonce_str>' .$nonce_str . '</nonce_str>
+           <op_user_id>'. $mch_id.'</op_user_id>
            <openid>' . $openid . '</openid>
            <out_trade_no>' . $out_trade_no . '</out_trade_no>
            <out_refund_no>'.$out_refund_no.'</out_refund_no>
            <spbill_create_ip>' . $spbill_create_ip . '</spbill_create_ip>
            <total_fee>' . $total_fee . '</total_fee>
            <refund_fee>' . $total_fee . '</refund_fee>
-           <trade_type>' . $trade_type . '</trade_type>
+         
            <sign>' . $sign . '</sign>
         </xml> ';
         $url = 'https://api.mch.weixin.qq.com/secapi/pay/refund';
@@ -166,6 +168,7 @@ class PayController extends BaseController {
             $data['code'] = __LINE__;
             $data['msg'] = "错误";
             $data['RETURN_CODE'] = $array['RETURN_CODE'];
+            $data['RESULT_CODE'] = $array['RESULT_CODE'];
             $data['RETURN_MSG'] = $array['RETURN_MSG'];
         }
         return json($data);

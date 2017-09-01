@@ -77,7 +77,7 @@ class Order extends Model {
             $where = ['status' => ['neq',self::ORDER_CANCEL],'user_id'=>$user_id];
             $where2 = ['status' => ['neq',self::ORDER_ADMIN_DEL]];
             $where3 = ['status' => ['neq',self::ORDER_USER_DEL]];
-            $list_order = $this->where($where)->where($where2)->where($where3)->order('create_time desc')->paginate(10);
+            $list_order = $this->where($where)->where($where2)->where($where3)->order('create_time desc')->paginate(2);
         }else{
             $where = ['user_id'=>$user_id];
             $where2=[];
@@ -88,7 +88,7 @@ class Order extends Model {
 
                 $where2 = "(status=3 or status=4) and good_st=1";
             }
-            $list_order = $this->where($where)->where($where2)->order('create_time desc')->paginate(2);
+            $list_order = $this->where($where)->where($where2)->order('create_time desc')->paginate(1);
         }
 
 //        foreach ($list_order as $k => $row_order) {

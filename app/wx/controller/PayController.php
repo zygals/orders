@@ -156,6 +156,7 @@ class PayController extends BaseController {
         $url = 'https://api.mch.weixin.qq.com/secapi/pay/refund';
         $xml = (new Pay())->http_request($url, $post_xml);
         $array = (new Pay())->xml($xml);//全要大写
+        return json($array);
         if ($array['RETURN_CODE'] == 'SUCCESS' && $array['RESULT_CODE'] == 'SUCCESS') {
             $row_order->status=Order::ORDER_REFUND;
             $row_order->save();

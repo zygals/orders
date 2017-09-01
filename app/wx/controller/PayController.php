@@ -148,14 +148,13 @@ class PayController extends BaseController {
            <appid>' . $appid . '</appid>
            <mch_id>' . $mch_id . '</mch_id>
            <nonce_str>' .$nonce_str . '</nonce_str>
-           <op_user_id>'. $mch_id.'</op_user_id>
+       
            <openid>' . $openid . '</openid>
            <out_trade_no>' . $out_trade_no . '</out_trade_no>
            <out_refund_no>'.$out_refund_no.'</out_refund_no>
            <spbill_create_ip>' . $spbill_create_ip . '</spbill_create_ip>
            <total_fee>' . $total_fee . '</total_fee>
            <refund_fee>' . $total_fee . '</refund_fee>
-         
            <sign>' . $sign . '</sign>
         </xml> ';
         $url = 'https://api.mch.weixin.qq.com/secapi/pay/refund';

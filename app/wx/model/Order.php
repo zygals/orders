@@ -90,6 +90,7 @@ class Order extends Model {
         foreach($list_order as $k=>$row_order){
             if(!empty($row_order->refund_no) && $row_order->status==self::ORDER_REFUND){
                 $res_refund = (new Pay())->refund_query($row_order->id);
+                return json($res_refund);
                     if($res_refund['code']==0){
                         if($res_refund['REFUND_STATUS']!='PROCESSING'){
                             if($res_refund['REFUND_STATUS']=='SUCCESS'){
@@ -108,6 +109,7 @@ class Order extends Model {
                     }
 
             }
+
         }
 //        foreach ($list_order as $k => $row_order) {
 //            $list_order_good = (new OrderGood())->getGoods($row_order->id);

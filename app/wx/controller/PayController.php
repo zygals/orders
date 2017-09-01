@@ -135,7 +135,7 @@ class PayController extends BaseController {
        // $post['body'] = $body;
         $post['mch_id'] = $mch_id;
         $post['nonce_str'] = $nonce_str;//随机字符串
-        $post['op_user_id'] = $mch_id;
+       // $post['op_user_id'] = $mch_id;
        //$post['notify_url'] = $notify_url;
         $post['openid'] = $openid;
         $post['out_refund_no'] = $out_refund_no;
@@ -162,16 +162,21 @@ class PayController extends BaseController {
         $xml = (new Pay())->http_post($url, $post_xml);
         $array = (new Pay())->xml($xml);//全要大写
        // return json($array);
-        if ($array['RETURN_CODE'] == 'SUCCESS' && $array['RESULT_CODE'] == 'SUCCESS') {
-            $row_order->status=Order::ORDER_REFUND;
-            $row_order->save();
-            $data['code'] = 0;
-            $data['msg'] = "退款申请接收成功，结果通过退款查询接口查询";
+        if ($array['RETURN_CODE'] == 'SUCCESS' ) {
+            if ($array['RESULT_CODE'] == 'SUCCESS' ) {
+                $row_order->status = Order::ORDER_REFUND;
+                $row_order->save();
+                $data['code'] = 0;
+                $data['msg'] = "退款申请接收成功，结果通过退款查询接口查询";
+            }else{
+                $data['code'] = __LINE__;
+                $data['msg'] = "提交业务失败";
+            }
+
         } else {
             $data['code'] = __LINE__;
             $data['msg'] = "错误";
             $data['RETURN_CODE'] = $array['RETURN_CODE'];
-            $data['RESULT_CODE'] = $array['RESULT_CODE'];
             $data['RETURN_MSG'] = $array['RETURN_MSG'];
         }
         return json($data);

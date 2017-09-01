@@ -121,9 +121,9 @@ class PayController extends BaseController {
         $appid = config('wx_appid');//如果是公众号 就是公众号的appid
         $mch_id =  config('wx_mchid');
         $nonce_str = (new Pay())->nonce_str();//随机字符串
-        $body = 'xiaochengxu tuikuan';
-        $notify_url = url('pay_ok');
-        $openid = User::where(['id'=>$user_id])->value('open_id');
+        //$body = 'xiaochengxu tuikuan';
+       // $notify_url = url('pay_ok');
+       // $openid = User::where(['id'=>$user_id])->value('open_id');
         $out_refund_no = $row_order->refund_no;//商户订单号
         $out_trade_no = $row_order->trade_no;//商户订单号
         $spbill_create_ip = config('wx_spbill_create_ip');
@@ -137,7 +137,7 @@ class PayController extends BaseController {
         $post['nonce_str'] = $nonce_str;//随机字符串
        // $post['op_user_id'] = $mch_id;
        //$post['notify_url'] = $notify_url;
-        $post['openid'] = $openid;
+        //$post['openid'] = $openid;
         $post['out_refund_no'] = $out_refund_no;
         $post['out_trade_no'] = $out_trade_no;
        // $post['spbill_create_ip'] = $spbill_create_ip;//终端的ip
@@ -148,8 +148,7 @@ class PayController extends BaseController {
            <appid>' . $appid . '</appid>
            <mch_id>' . $mch_id . '</mch_id>
            <nonce_str>' .$nonce_str . '</nonce_str>
-       
-           <openid>' . $openid . '</openid>
+           <op_user_id>'. $mch_id.'</op_user_id>
            <out_trade_no>' . $out_trade_no . '</out_trade_no>
            <out_refund_no>'.$out_refund_no.'</out_refund_no>
            <spbill_create_ip>' . $spbill_create_ip . '</spbill_create_ip>

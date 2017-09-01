@@ -88,9 +88,9 @@ class Order extends Model {
             $list_order = $this->where($where)->where($where2)->order('create_time desc')->paginate(5);
         }
         foreach($list_order as $k=>$row_order){
-            if(!empty($row_order->refund_no) && $row_order->status==self::ORDER_REFUND){
+            if(!empty($row_order->refund_no) && $row_order->status=='退款中'){
                 $res_refund = (new Pay())->refund_query($row_order->id);
-                return json($res_refund);
+              //  return json($res_refund);
                     if($res_refund['code']==0){
                         if($res_refund['REFUND_STATUS']!='PROCESSING'){
                             if($res_refund['REFUND_STATUS']=='SUCCESS'){

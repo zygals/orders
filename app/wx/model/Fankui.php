@@ -28,15 +28,14 @@ class Fankui extends Model {
         if(is_array($user_id)){
             return $user_id;
         }
-        $list_ = self::where(['user_id'=>$user_id,'fankui.st'=>1])->join('user','fankui.user_id=user.id')->field('fankui.*,nickname,vistar,name username')->paginate(2);
-        $k=-1;
+        $num = self::where(['user_id'=>$user_id,'fankui.st'=>1])->count();
+        $list_ = self::where(['user_id'=>$user_id,'fankui.st'=>1])->join('user','fankui.user_id=user.id')->field('fankui.*,nickname,vistar,name username')->paginate(6);
+
         foreach($list_ as $k=>$row_){
             $list_good = Good::where(['id'=>['in',$row_->good_ids]])->field('name,img_thumb')->select();
             $list_[$k]['goods'] = $list_good;
         }
-        if($k>=0){
-            $num = $k+1;
-        }
+
         return ['code'=>0,'msg'=>'get fankui ok','num'=>$num,'data'=>$list_];
     }
     //wx delete by user

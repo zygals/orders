@@ -22,17 +22,22 @@ class Fankui extends Model {
         (new Order)->changeStatus(['status'=>'fankui','order_id'=>$data['order_id']]);
         return ['code'=>0,'msg'=>'add fankui ok'];
     }
+    //wx
     public static function getList($data){
         $user_id = User::getUserIdByName($data['user_name']);
         if(is_array($user_id)){
             return $user_id;
         }
-        $list_ = self::where(['user_id'=>$user_id,'fankui.st'=>1])->join('good','good.id=fankui.good_id')->join('user','fankui.user_id=user.id')->field('fankui.*,good.img,good.title,cont,nickname,vistar')->paginate();
+        $list_ = self::where(['user_id'=>$user_id,'fankui.st'=>1])->join('user','fankui.user_id=user.id')->field('fankui.*,nickname,vistar,name username')->paginate();
+        foreach($list_ as $k=>$row_){
+            $list_good = Good::where(['id'=>['in',$row_->good_ids]])->field('name,img_thumb')->select();
+            $list_[$k]['goods'] = $list_good;
+        }
         return ['code'=>0,'msg'=>'get fankui ok','data'=>$list_];
     }
-    //wx
+    //wx delete by user
     public static function delRow($data){
-        $row_ = self::where(['order_id'=>$data['order_id'],'good_id'=>$data['good_id'],'st'=>1])->find();
+        $row_ = self::where(['id'=>$data['id'],'st'=>1])->find();
         if(!$row_){
             return ['code'=>__LINE__,'msg'=>'不存在'];
         }

@@ -24,7 +24,7 @@ class Fankui extends Model {
     }
     //wx
     public static function getList($data){
-        $user_id = User::getUserIdByName($data['user_name']);
+        $user_id = User::getUserIdByName($data['username']);
         if(is_array($user_id)){
             return $user_id;
         }

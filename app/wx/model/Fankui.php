@@ -29,11 +29,15 @@ class Fankui extends Model {
             return $user_id;
         }
         $list_ = self::where(['user_id'=>$user_id,'fankui.st'=>1])->join('user','fankui.user_id=user.id')->field('fankui.*,nickname,vistar,name username')->paginate();
+        $k=0;
         foreach($list_ as $k=>$row_){
             $list_good = Good::where(['id'=>['in',$row_->good_ids]])->field('name,img_thumb')->select();
             $list_[$k]['goods'] = $list_good;
         }
-        return ['code'=>0,'msg'=>'get fankui ok','data'=>$list_];
+        if($k>0){
+            $num = $k+1;
+        }
+        return ['code'=>0,'msg'=>'get fankui ok','num'=>$num,'data'=>$list_];
     }
     //wx delete by user
     public static function delRow($data){

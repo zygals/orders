@@ -103,7 +103,8 @@
 					{$order->create_time}
 				</div>
 				<div class="col-xs-">
-					<a href="{:url('read')}?id={$order->id}&type={$order->type}"><button class="btn btn-success btn-xs "  onclick="">查看</button></a>
+					<!--<a href="{:url('read')}?id={$order->id}&type={$order->type}"><button class="btn btn-success btn-xs "  onclick="openWindow(this)">查看</button></a>-->
+					<button class="btn btn-success btn-xs "  onclick="openWindow('{$order->id}','{$order->type}')">查看</button>
 
                     <?php if($order->status=='已支付' && ($order->good_st=='待做' || $order->good_st=='已接单' || $order->good_st=='已送出')){?>
 					<a href="{:url('edit')}?id={$order->id}"><button class="btn btn-info btn-xs del_">改状态</button></a>
@@ -200,12 +201,11 @@
 		</div>
 		<!-- /.modal-dialog -->
 	</div>
-
-
-
 </div>
 <script>
-
+  function openWindow(id,type) {
+     window.open("{:url('read')}?id="+id+"&type="+type,'orderDetail',"width=800,height=500,left=250,top=100,location=no,menubar=0");
+  }
     function del_(obj) {
         var id = $(obj).attr('data-id');
         $('#del_id').val(id);

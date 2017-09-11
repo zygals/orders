@@ -9,3 +9,6 @@ public/index.php
 public/wx.php
 public/wx_shop.php
 vendor
+app/config.php
+app/database.php
+db

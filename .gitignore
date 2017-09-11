@@ -5,4 +5,7 @@ thinkphp
 runtime
 think
 public/uploads
+public/index.php
+public/wx.php
+public/wx_shop.php
 vendor
